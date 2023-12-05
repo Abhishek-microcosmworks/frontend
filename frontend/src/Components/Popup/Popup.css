@@ -1,0 +1,153 @@
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+  .popup-main {
+    position: relative;
+    /* background-color: rgba(239, 235, 235, 0.5); */
+    background: white;
+    opacity: 90%;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    text-align: center;
+    margin-top: 5%;
+    margin-left: 8%;
+  }
+
+
+  .image-container{
+    display: flex;
+    flex-direction: column;
+    height: 40%;
+    width: 100%;
+  }
+
+  .image-heading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    font-weight: 700;
+    font-family: "Noto Sans";
+  }
+
+  .images{
+    display: flex;
+    flex-direction: row;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    margin-bottom: 1%;
+  }
+
+  .generated-image{
+    height: fit-content;
+    width: fit-content;
+    margin-left: 20%;
+    margin-top: 3%;
+  }
+
+  .context-container{
+    max-width: 200px;
+    width: 100%;
+    border: 1px solid black;
+  }
+
+  .generated-btn{
+    width: fit-content;
+    height: fit-content;
+    margin-top: 24%;
+    margin-left: -16%;
+  }
+
+  .generated-btn > button{
+    background-color: #008080;
+    width: 140px;
+    height: 30px;
+    outline: none;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Noto Sans";
+    border-radius: 6px;
+  }
+
+  .generated-images{
+    max-height: 200px;
+    height: 100%;
+    width: 10%;
+    margin-left: 60%;
+    margin-top: 3%;
+    padding-top: 1%;
+    overflow-y: scroll;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  
+  .generated-images::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .generated-images::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #008080;
+  }
+
+  .blog-container{
+     display: flex;
+     height: 100%;
+     max-height: 500px;
+  }
+
+  .blog{
+    width: 60%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    box-shadow: rgba(0, 0, 0, 0.35) 1px 8px 10px;
+  }
+
+  .blog::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .blog::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #008080;
+  }
+
+  .close-btn{
+    height: fit-content;
+    width: fit-content;
+    margin-top: 40%;
+    margin-left: 5%;
+  }
+
+  .close-btn > button{
+    background-color: #008080;
+    width: 140px;
+    height: 30px;
+    outline: none;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Noto Sans";
+    border-radius: 6px;
+  }
+  
+  .display-block {
+    display: block;
+  }
+  
+  .display-none {
+    display: none;
+  }
+  
