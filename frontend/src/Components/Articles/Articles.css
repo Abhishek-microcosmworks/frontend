@@ -104,21 +104,6 @@
     margin-top: 6%;
 }
 
-.edit-btn{
-    background-color: #008080;
-    width: 140px;
-    height: 30px;
-    outline: none;
-    border: none;
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: "Noto Sans";
-    border-radius: 6px;
-    margin-left: 108.5%;
-    margin-top: 47%;
-}
-
 
 @media (max-width: 800px) {
     .blog_container {

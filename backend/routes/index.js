@@ -16,6 +16,7 @@ import { generateImage } from './generateImages/index.js';
 import { generateKeywords } from './generateKeywords/index.js';
 import { editImage } from './editimage/index.js';
 import { generateContext } from './generateContext/index.js';
+import { getImages } from './getImages/index.js';
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -34,5 +35,6 @@ router.post('/gen-image', generateImage);
 router.post('/gen-keywords',generateKeywords);
 router.post('/edit-image',editImage);
 router.post('/gen-context', generateContext);
+router.post('/blog/getImages', getImages);
 
 export default router;

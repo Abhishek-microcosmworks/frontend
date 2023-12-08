@@ -12,8 +12,6 @@ export let sendOTP;
 export const getOtp = async (req, res) => {
   try {
     const { name, email } = req.body;
-    console.log('my asdfm emailil is', email);
-    console.log('my asdl is', name);
     const existingUser = await RegisterData.findOne({ email });
 
     if (!existingUser) {
@@ -56,7 +54,6 @@ async function createRegisterData(name, email) {
       isDeleted: false,
     };
     const userData = await RegisterData.create(data);
-    console.log('Register details :', userData);
   } catch (error) {
     console.error('Error showing login:', error);
   }

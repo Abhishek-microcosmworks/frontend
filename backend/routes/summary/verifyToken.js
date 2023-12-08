@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 export const verifyToken = async (req, res, next) => {
   try {
     const { userToken } = req.body;
-    console.log('my token from frontend is', userToken);
 
     if (!userToken) {
       console.log('Token is missing');
@@ -23,15 +22,12 @@ export const verifyToken = async (req, res, next) => {
 
     const currentTime = Math.floor(Date.now() / 1000);
 
-    console.log('decoded is', decoded);
-
     if (decoded.exp !== undefined && decoded.exp < currentTime) {
       console.log('Token expired');
       return res
         .status(401)
         .json({ expired: true, decoded, message: 'token expired' });
     } else {
-      console.log('Token is present');
       req.decoded = decoded;
       next();
 

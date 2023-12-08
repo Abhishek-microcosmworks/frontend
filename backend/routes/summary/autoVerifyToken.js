@@ -14,18 +14,15 @@ export const autoVerifyToken = async (req, res) => {
     // console.log('decoded is for auto', decoded);
 
     if (decoded.exp !== undefined && decoded.exp < currentTime) {
-      console.log('Token in auto expired');
 
       return res
         .status(200)
         .json({ expired: true, decoded, message: 'token auto expired' });
     } else {
-      console.log('Token is auto present');
       return res.status(400).json({ expired: false, decoded, newToken: token });
     }
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      console.log('Token has expired');
       // console.log('value of token i', token);
       const result = await authenticationToken.findOneAndUpdate(
         { token },

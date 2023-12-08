@@ -28,8 +28,8 @@ export const verifyOtp = async (req, res) => {
       return res.status(404).json({ message: 'user is not registerd' });
     }
   } catch (error) {
-    console.error('kuch to matter hai ', error);
-    return res.status(500).json({ message: 'kuch to matter hai' });
+    console.error('Error: ', error);
+    return res.status(500).json({ message: error.message });
   }
 };
 

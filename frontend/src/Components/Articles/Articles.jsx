@@ -92,17 +92,6 @@ function Articles() {
     setContext('');
     setUrl('');
     setEditing(false);
-    // setHideEditButton(!editing);
-    // setEditing(true);
-    // setBlogContent('');
-    // setSummary('')
-    // setEditedContent('');
-  };
-
-  const handleEditClick = () => {
-    setEditing(true);
-    setEditedContent(summary);
-    setHideEditButton(false);
   };
 
   const handleSaveClick = () => {
@@ -164,9 +153,17 @@ function Articles() {
           )}
         </button>
       </div>
-      <Popup show={showPopup} handleClose={handleClosePopup} blogcontent={blogcontent}>
+      <Popup
+        show={showPopup}
+        handleClose={handleClosePopup}
+        blogcontent={blogcontent}
+        setHideEditButton={setHideEditButton}
+        hideEditButton={hideEditButton}
+        setEditing={setEditing}
+        setEditedContent={setEditedContent}
+        summary={summary}
+      >
         <h2>Blog Generated Successfully!</h2>
-
         <div className="editor">
           {editing ? (
             <div>
@@ -189,11 +186,6 @@ function Articles() {
             </div>
           )}
         </div>
-        {hideEditButton && (
-          <button onClick={handleEditClick} type="button">
-            Edit
-          </button>
-        )}
       </Popup>
     </div>
   );

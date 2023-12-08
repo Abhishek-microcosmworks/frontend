@@ -7,6 +7,7 @@ const RegisterSchema = new Schema(
     name: { type: String },
     email: { type: String },
     otp: { type: String },
+    image_id: {type: Array},
     isDeleted: { type: Boolean, default: false },
   },
   {

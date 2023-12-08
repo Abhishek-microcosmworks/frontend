@@ -9,12 +9,55 @@ import PropTypes from 'prop-types';
 import spinner from '../../assets/images/loader.gif';
 
 function Popup({
-  show, children, handleClose, blogcontent,
+  show,
+  children,
+  handleClose,
+  blogcontent,
+  setHideEditButton,
+  hideEditButton,
+  setEditing,
+  setEditedContent,
+  summary,
 }) {
   const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [blogContext, setBlogContext] = useState('');
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [contextGenerating, setContextGenerating] = useState(false);
+  const [imagesUrl, setImagesUrl] = useState([]);
+  const [hoveredImage, setHoveredImage] = useState(null);
+  const [showButtons, setShowButtons] = useState(false);
   const showHideClassName = show ? 'popup display-block' : 'popup display-none';
+
+  async function getImages() {
+    const res = await axios.post('http://localhost:5000/blog/getImages', {
+      email: localStorage.getItem('email'),
+    });
+
+    console.log(res.data.images);
+    setImagesUrl(res.data.images);
+  }
+
+  const handleGenerateContext = async () => {
+    try {
+      setContextGenerating(true);
+      const matches = blogcontent.match(/<p>(.*?)<\/p>/g);
+      const cleanedContent = matches ? matches.map((match) => match.replace(/<\/?p>/g, '')).join('') : '';
+      const finalCleanedContent = cleanedContent.replace(/"/g, '');
+      console.log(finalCleanedContent);
+      const response = await axios.post('http://localhost:5000/gen-context', {
+        blogContent: `${finalCleanedContent}`,
+      });
+
+      console.log(blogContext);
+      setBlogContext(response.data.choices[0].message.content);
+      setContextGenerating(false);
+      setButtonClicked(true);
+    } catch (error) {
+      console.log(error);
+      setContextGenerating(false);
+    }
+  };
 
   const handleGenerateImage = async () => {
     try {
@@ -24,10 +67,13 @@ function Popup({
         console.log(blogContext);
         const imageResponse = await axios.post('http://localhost:5000/gen-image', {
           prompt: blogContext,
+          email: localStorage.getItem('email'),
         });
 
         console.log(imageResponse.data.data[0].url);
+        getImages();
         setImageUrl(imageResponse.data.data[0].url);
+        setButtonClicked(true);
       } else {
         const matches = blogcontent.match(/<p>(.*?)<\/p>/g);
         const cleanedContent = matches ? matches.map((match) => match.replace(/<\/?p>/g, '')).join('') : '';
@@ -37,63 +83,141 @@ function Popup({
           blogContent: `${finalCleanedContent}`,
         });
 
+        console.log(blogContext);
         setBlogContext(response.data.choices[0].message.content);
 
         const imageResponse = await axios.post('http://localhost:5000/gen-image', {
-          prompt: blogContext,
+          prompt: response.data.choices[0].message.content,
+          email: localStorage.getItem('email'),
         });
 
         console.log(imageResponse.data.data[0].url);
+        getImages();
         setImageUrl(imageResponse.data.data[0].url);
       }
       setIsLoading(false);
+      setButtonClicked(true);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
     }
   };
 
+  const textChange = (e) => {
+    console.log(e.target.value);
+    setBlogContext(e.target.value);
+  };
+
+  const handleEditClick = () => {
+    setEditing(true);
+    setEditedContent(summary);
+    setHideEditButton(false);
+  };
+
+  const handleImageHover = (imageurl) => {
+    setHoveredImage(imageurl);
+    setShowButtons(true);
+  };
+
+  const handleImageLeave = () => {
+    setHoveredImage(null);
+    setShowButtons(false);
+  };
+
+  const handleExpandClick = (imageurl) => {
+    // Implement the logic for expanding the image
+    console.log(`Expand image: ${imageurl}`);
+  };
+
+  const handleSelectClick = (imageurl) => {
+    // Implement the logic for selecting the image
+    console.log(`Select image: ${imageurl}`);
+    setImageUrl(imageurl);
+  };
+
   return (
     <div className={showHideClassName}>
       <div className="popup-main">
-        <div className="image-container">
-          <div className="image-heading">
-            Generated Image
-          </div>
-          <div className="images">
-            <div className="generated-image">
-              <img src={imageUrl} alt="dummy" height={200} width={200} />
+        { buttonClicked && (
+          <div className="image-container">
+            <div className="image-heading">
+              Generated Image
             </div>
-            {
-              blogContext && (
-                <div className="context-container">
-                  <p>Context</p>
+            <div className="images">
+              <div className="generated-image">
+                <img src={imageUrl} alt="dummy" height={250} width={250} />
+              </div>
+              <div className="context-container">
+                <div className="context">
+                  <textarea
+                    id="textArea"
+                    className="input-textarea"
+                    placeholder="Enter the context"
+                    style={{
+                      overflowY: 'scroll',
+                      overflowX: 'hidden',
+                      backgroundColor: '#F1F2F4',
+                      borderRadius: '7px',
+                      border: 'none',
+                      outline: 'none',
+                      fontFamily: 'Noto Sans',
+                      resize: 'none',
+                      fontSize: '16px',
+                      fontWeight: '457',
+                      color: '#000000',
+                    }}
+                    value={blogContext}
+                    onChange={textChange}
+                  >
+                    {blogcontent}
+                  </textarea>
                 </div>
-              )
-            }
-            <div className="generated-btn">
-              <button type="button" onClick={handleGenerateImage}>{isLoading ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Image'}</button>
-            </div>
-            {/*
+                <div className="generate-btns">
+                  <div className="context-btn">
+                    <button type="button" onClick={handleGenerateContext}>{contextGenerating ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Context'}</button>
+                  </div>
+                </div>
+              </div>
               <div className="generated-images">
-              <img src={dummyImage} alt="dummy" height={70} width={70} />
-              <img src={dummyImage} alt="dummy" height={70} width={70} />
-              <img src={dummyImage} alt="dummy" height={70} width={70} />
-              <img src={dummyImage} alt="dummy" height={70} width={70} />
-              <img src={dummyImage} alt="dummy" height={70} width={70} />
-              <img src={dummyImage} alt="dummy" height={70} width={70} />
+                {imagesUrl.map((image) => (
+                  <div key={image.image_url} className="generated-image" onMouseEnter={() => handleImageHover(image.image_url)} onMouseLeave={handleImageLeave}>
+                    {hoveredImage === image.image_url && showButtons && (
+                      <div className="image-buttons">
+                        <button onClick={() => handleExpandClick(image.image_url)} type="button">
+                          Expand
+                        </button>
+                        <button onClick={() => handleSelectClick(image.image_url)} type="button">
+                          Select
+                        </button>
+                      </div>
+                    )}
+                    <img src={image.image_url} alt="spinner" height={150} width={150} />
+                  </div>
+                ))}
+              </div>
             </div>
-            */}
           </div>
-        </div>
-        <div className="blog-container">
+        )}
+        <div className="blog-container" style={{ maxHeight: buttonClicked ? '500px' : '' }}>
           <div className="blog">
             {children}
           </div>
-          <div className="close-btn">
-            <button onClick={handleClose} type="button">
-              Close
-            </button>
+          <div className="btns-container">
+            {hideEditButton && (
+              <div className="edit-btn">
+                <button onClick={handleEditClick} type="button">
+                  Edit
+                </button>
+              </div>
+            )}
+            <div className="close-btn">
+              <button onClick={handleClose} type="button">
+                Close
+              </button>
+            </div>
+            <div className="image-btn">
+              <button type="button" onClick={handleGenerateImage}>{isLoading ? <img src={spinner} alt="loading..." height={40} width={40} /> : 'Generate Image'}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -106,6 +230,11 @@ Popup.propTypes = {
   children: PropTypes.node.isRequired,
   handleClose: PropTypes.func.isRequired,
   blogcontent: PropTypes.string.isRequired,
+  setHideEditButton: PropTypes.func.isRequired,
+  hideEditButton: PropTypes.bool.isRequired,
+  setEditing: PropTypes.func.isRequired,
+  setEditedContent: PropTypes.func.isRequired,
+  summary: PropTypes.string.isRequired,
 };
 
 export default Popup;

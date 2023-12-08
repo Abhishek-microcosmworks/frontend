@@ -21,8 +21,6 @@ export const loginCredential = async (req, res) => {
       isDeleted: { $ne: true },
     });
 
-    console.log('************Retrieved user:****************');
-
     if (!email) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -30,9 +28,6 @@ export const loginCredential = async (req, res) => {
     const otpExpirationTime = user.otpExp;
     const currentTime = Math.floor(Date.now() / 1000);
 
-    console.log(currentTime);
-    console.log(otpExpirationTime);
-    console.log('my user ', user);
     let sendOTP = user.otp;
     console.log('mysend otp is', sendOTP);
 
@@ -66,7 +61,6 @@ export const loginCredential = async (req, res) => {
         { isDeleted: true },
         { new: true },
       );
-      console.log('i am reachable');
       return res.status(200).json({ success: true, token });
     } else {
       console.log('otp is incorrect');
