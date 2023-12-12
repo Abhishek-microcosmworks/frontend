@@ -19,11 +19,12 @@ function Articles() {
   const [editedContent, setEditedContent] = useState('');
   const [url, setUrl] = useState('');
   const [url1, setUrl1] = useState('');
-  // const [url2, setUrl2] = useState('');
   const [loader, setLoader] = useState(false);
   const [blogcontent, setBlogContent] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [hideEditButton, setHideEditButton] = useState(true);
+  const [blogObject, setBlogObject] = useState({});
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   useEffect(() => {
     if (!showPopup) {
@@ -36,7 +37,6 @@ function Articles() {
     e.preventDefault();
     setLoader(true);
     const email = localStorage.getItem('email');
-    console.log('hey bemail', email);
     try {
       const { data } = await axios.post(
         'http://localhost:5000/article',
@@ -52,17 +52,10 @@ function Articles() {
           },
         },
       );
-      console.log(data.data.urls);
       console.log('openAI data is', data);
-      // const answer = data.data.completion.choices[0].message.content;
-      // const blogDetails = data.data.scrapCompletion.choices[0].message.content;
-      // const finalBlog = data.data.finalContent.choices[0].message.content;
+      setBlogObject(data.data);
       const blogData = data.data.blogData.finalContent;
-      // console.log('blog', finalBlog);
-      // const mixedData = finalBlog;
       console.log('my data is', blogData);
-      // console.log('my mixed data is', mixedData);
-      // console.log('my blogdeetails data is', blogDetails);
       let htmlData = '';
       blogData.split('\n').forEach((line) => {
         htmlData += `<p>${line}</p>`;
@@ -71,15 +64,8 @@ function Articles() {
       setSummary(htmlData);
       setLoader(false);
       console.log('so content title is ', context);
-      // const UrlId = data.data.completion.id;
-      // console.log('response Url is ', UrlId);
       setUrl(url);
       setUrl1(url1);
-      // setUrl2(url2);
-
-      // const responseData = answer;
-      // console.log(responseData);
-
       setBlogContent(htmlData);
       setShowPopup(true);
     } catch (error) {
@@ -92,13 +78,23 @@ function Articles() {
     setContext('');
     setUrl('');
     setEditing(false);
+    setButtonClicked(false);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     setEditing(false);
     setSummary(editedContent);
     setBlogContent(editedContent);
     setHideEditButton(true);
+    console.log(blogObject.blogData._id);
+    const res = await axios.post('http://localhost:5000/blog/edit/blog', {
+      context,
+      id: blogObject.blogData._id,
+      blogContent: editedContent,
+      email: blogObject.blogData.email,
+    });
+    console.log(res);
+    setBlogObject(res.data);
   };
 
   return (
@@ -159,9 +155,12 @@ function Articles() {
         blogcontent={blogcontent}
         setHideEditButton={setHideEditButton}
         hideEditButton={hideEditButton}
+        editing={editing}
         setEditing={setEditing}
         setEditedContent={setEditedContent}
         summary={summary}
+        setButtonClicked={setButtonClicked}
+        buttonClicked={buttonClicked}
       >
         <h2>Blog Generated Successfully!</h2>
         <div className="editor">
@@ -176,9 +175,11 @@ function Articles() {
                 }}
               />
 
-              <button onClick={handleSaveClick} type="button">
-                Save
-              </button>
+              <div className="save-btn">
+                <button onClick={handleSaveClick} type="button">
+                  Save
+                </button>
+              </div>
             </div>
           ) : (
             <div>

@@ -7,6 +7,7 @@ const blog_schema = new Schema(
     title: { type: String },
     finalContent: { type: String },
     isDeleted: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: false },
   },
   {
     timestamps: {

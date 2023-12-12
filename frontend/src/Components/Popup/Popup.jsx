@@ -6,6 +6,8 @@ import './Popup.css';
 
 import PropTypes from 'prop-types';
 
+import closeIcon from '../../assets/images/icons8-close-60.png';
+
 import spinner from '../../assets/images/loader.gif';
 
 function Popup({
@@ -15,18 +17,21 @@ function Popup({
   blogcontent,
   setHideEditButton,
   hideEditButton,
+  editing,
   setEditing,
   setEditedContent,
   summary,
+  setButtonClicked,
+  buttonClicked,
 }) {
   const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [blogContext, setBlogContext] = useState('');
-  const [buttonClicked, setButtonClicked] = useState(false);
   const [contextGenerating, setContextGenerating] = useState(false);
   const [imagesUrl, setImagesUrl] = useState([]);
   const [hoveredImage, setHoveredImage] = useState(null);
   const [showButtons, setShowButtons] = useState(false);
+  const [expandedImage, setExpandedImage] = useState('');
   const showHideClassName = show ? 'popup display-block' : 'popup display-none';
 
   async function getImages() {
@@ -125,6 +130,7 @@ function Popup({
   };
 
   const handleExpandClick = (imageurl) => {
+    setExpandedImage(imageurl);
     // Implement the logic for expanding the image
     console.log(`Expand image: ${imageurl}`);
   };
@@ -135,9 +141,31 @@ function Popup({
     setImageUrl(imageurl);
   };
 
+  const handleCloseExpandedImage = () => {
+    console.log('closed-called');
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 'Enter') {
+      console.log('Enter-handleKeyDown');
+    }
+  };
+
   return (
     <div className={showHideClassName}>
       <div className="popup-main">
+        <div className="close-icon">
+          <button type="button" onClick={handleClose}>
+            <img src={closeIcon} alt="close-icon" height={30} width={30} />
+          </button>
+        </div>
+        {expandedImage && (
+          <div role="button" tabIndex={0} className="expanded-image-overlay" onClick={handleCloseExpandedImage} onKeyDown={handleKeyDown}>
+            <div className="expanded-image-container">
+              <img src={expandedImage} alt="expanded" />
+            </div>
+          </div>
+        )}
         { buttonClicked && (
           <div className="image-container">
             <div className="image-heading">
@@ -183,10 +211,10 @@ function Popup({
                   <div key={image.image_url} className="generated-image" onMouseEnter={() => handleImageHover(image.image_url)} onMouseLeave={handleImageLeave}>
                     {hoveredImage === image.image_url && showButtons && (
                       <div className="image-buttons">
-                        <button onClick={() => handleExpandClick(image.image_url)} type="button">
+                        <button className="expand-btn" onClick={() => handleExpandClick(image.image_url)} type="button">
                           Expand
                         </button>
-                        <button onClick={() => handleSelectClick(image.image_url)} type="button">
+                        <button className="select-btn" onClick={() => handleSelectClick(image.image_url)} type="button">
                           Select
                         </button>
                       </div>
@@ -198,11 +226,11 @@ function Popup({
             </div>
           </div>
         )}
-        <div className="blog-container" style={{ maxHeight: buttonClicked ? '500px' : '' }}>
+        <div className="blog-container" style={{ height: buttonClicked ? '45%' : '100%' }}>
           <div className="blog">
             {children}
           </div>
-          <div className="btns-container">
+          <div className="btns-container" style={{ marginTop: buttonClicked ? '15%' : '35%' }}>
             {hideEditButton && (
               <div className="edit-btn">
                 <button onClick={handleEditClick} type="button">
@@ -210,14 +238,13 @@ function Popup({
                 </button>
               </div>
             )}
-            <div className="close-btn">
-              <button onClick={handleClose} type="button">
-                Close
-              </button>
-            </div>
-            <div className="image-btn">
-              <button type="button" onClick={handleGenerateImage}>{isLoading ? <img src={spinner} alt="loading..." height={40} width={40} /> : 'Generate Image'}</button>
-            </div>
+            {
+              !editing && (
+                <div className="image-btn">
+                  <button type="button" onClick={handleGenerateImage}>{isLoading ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Image'}</button>
+                </div>
+              )
+            }
           </div>
         </div>
       </div>
@@ -232,9 +259,12 @@ Popup.propTypes = {
   blogcontent: PropTypes.string.isRequired,
   setHideEditButton: PropTypes.func.isRequired,
   hideEditButton: PropTypes.bool.isRequired,
+  editing: PropTypes.bool.isRequired,
   setEditing: PropTypes.func.isRequired,
   setEditedContent: PropTypes.func.isRequired,
   summary: PropTypes.string.isRequired,
+  setButtonClicked: PropTypes.func.isRequired,
+  buttonClicked: PropTypes.bool.isRequired,
 };
 
 export default Popup;

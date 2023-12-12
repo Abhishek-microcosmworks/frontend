@@ -42,7 +42,7 @@ async function createOtpData(email, sendOTP) {
       isDeleted: false,
     };
     const OtpData = await otpGeneration.create(data);
-    console.log('****otp details********* :');
+    console.log('****otp details********* :',OtpData);
   } catch (error) {
     console.error('Error showing login:', error);
   }
