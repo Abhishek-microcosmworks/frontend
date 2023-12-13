@@ -25,7 +25,7 @@ function Header(
     const token = localStorage.getItem('token');
     // console.log('logout token', token);
     try {
-      const response = await fetch('http://localhost:5000/logout', {
+      const response = await fetch('http://3.233.72.68/:5000/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

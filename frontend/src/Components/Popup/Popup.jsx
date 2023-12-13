@@ -35,7 +35,7 @@ function Popup({
   const showHideClassName = show ? 'popup display-block' : 'popup display-none';
 
   async function getImages() {
-    const res = await axios.post('http://localhost:5000/blog/getImages', {
+    const res = await axios.post('http://3.233.72.68/:5000/blog/getImages', {
       email: localStorage.getItem('email'),
     });
 
@@ -50,7 +50,7 @@ function Popup({
       const cleanedContent = matches ? matches.map((match) => match.replace(/<\/?p>/g, '')).join('') : '';
       const finalCleanedContent = cleanedContent.replace(/"/g, '');
       console.log(finalCleanedContent);
-      const response = await axios.post('http://localhost:5000/gen-context', {
+      const response = await axios.post('http://3.233.72.68/:5000/gen-context', {
         blogContent: `${finalCleanedContent}`,
       });
 
@@ -70,7 +70,7 @@ function Popup({
 
       if (blogContext !== '') {
         console.log(blogContext);
-        const imageResponse = await axios.post('http://localhost:5000/gen-image', {
+        const imageResponse = await axios.post('http://3.233.72.68/:5000/gen-image', {
           prompt: blogContext,
           email: localStorage.getItem('email'),
         });
@@ -84,14 +84,14 @@ function Popup({
         const cleanedContent = matches ? matches.map((match) => match.replace(/<\/?p>/g, '')).join('') : '';
         const finalCleanedContent = cleanedContent.replace(/"/g, '');
         console.log(finalCleanedContent);
-        const response = await axios.post('http://localhost:5000/gen-context', {
+        const response = await axios.post('http://3.233.72.68/:5000/gen-context', {
           blogContent: `${finalCleanedContent}`,
         });
 
         console.log(blogContext);
         setBlogContext(response.data.choices[0].message.content);
 
-        const imageResponse = await axios.post('http://localhost:5000/gen-image', {
+        const imageResponse = await axios.post('http://3.233.72.68/:5000/gen-image', {
           prompt: response.data.choices[0].message.content,
           email: localStorage.getItem('email'),
         });

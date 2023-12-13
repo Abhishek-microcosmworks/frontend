@@ -39,7 +39,7 @@ function Articles() {
     const email = localStorage.getItem('email');
     try {
       const { data } = await axios.post(
-        'http://localhost:5000/article',
+        'http://3.233.72.68/:5000/article',
         {
           urls: [url, url1],
           context,
@@ -87,7 +87,7 @@ function Articles() {
     setBlogContent(editedContent);
     setHideEditButton(true);
     console.log(blogObject.blogData._id);
-    const res = await axios.post('http://localhost:5000/blog/edit/blog', {
+    const res = await axios.post('http://3.233.72.68/:5000/blog/edit/blog', {
       context,
       id: blogObject.blogData._id,
       blogContent: editedContent,

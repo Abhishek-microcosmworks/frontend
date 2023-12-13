@@ -49,7 +49,7 @@ function Login({ setShowLogin }) {
       userToken = localStorage.getItem('token');
       // console.log('getting token from local storage', userToken);
 
-      const res = await fetch('http://localhost:5000/verify-token', {
+      const res = await fetch('http://3.233.72.68/:5000/verify-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ function Login({ setShowLogin }) {
       userToken = localStorage.getItem('token');
       // console.log('getting token from local storage', userToken);
 
-      const res = await fetch('http://localhost:5000/autoverify-token', {
+      const res = await fetch('http://3.233.72.68/:5000/autoverify-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ function Login({ setShowLogin }) {
     console.log('login clicked');
 
     try {
-      const res = await fetch('http://localhost:5000/verify-login', {
+      const res = await fetch('http://3.233.72.68/:5000/verify-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ function Login({ setShowLogin }) {
     // localStorage.setItem('otpEntered', otp);
     // const enteredOtp = localStorage.getItem('otpEntered');
 
-    const res = await fetch('http://localhost:5000/login', {
+    const res = await fetch('http://3.233.72.68/:5000/login', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -237,7 +237,7 @@ function Login({ setShowLogin }) {
     // localStorage.setItem('otpEntered', otp);
     // const enteredOtp = localStorage.getItem('otpEntered');
 
-    const res = await fetch('http://localhost:5000/resend-otp', {
+    const res = await fetch('http://3.233.72.68/:5000/resend-otp', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

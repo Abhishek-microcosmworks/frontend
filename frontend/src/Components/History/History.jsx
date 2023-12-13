@@ -5,7 +5,7 @@ function History() {
   const handleGetHistory = async () => {
     const email = localStorage.getItem('email');
     try {
-      const res = await fetch('http://localhost:5000/history', {
+      const res = await fetch('http://3.233.72.68/:5000/history', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

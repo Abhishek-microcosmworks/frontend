@@ -53,7 +53,7 @@ function Register({ setShowLogin }) {
     console.log('handle otp', email);
     localStorage.setItem('email', email);
     try {
-      const res = await fetch('http://localhost:5000/send-otp', {
+      const res = await fetch('http://3.233.72.68/:5000/send-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function Register({ setShowLogin }) {
     console.log('handle register', userEmail);
     console.log('email before sending request', userEmail);
 
-    const res = await fetch('http://localhost:5000/register', {
+    const res = await fetch('http://3.233.72.68/:5000/register', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -131,7 +131,7 @@ function Register({ setShowLogin }) {
     console.log('my typing otp is/', otp);
     const userEmail = localStorage.getItem('email');
 
-    const res = await fetch('http://localhost:5000/resend-otp', {
+    const res = await fetch('http://3.233.72.68/:5000/resend-otp', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
