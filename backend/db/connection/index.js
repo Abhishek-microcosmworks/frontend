@@ -6,7 +6,7 @@ const options = {
 };
 
 const mongoose_connection = mongoose.createConnection(
-  'mongodb://127.0.0.1:27017/New_blog_db',
+  'mongodb+srv://abhishek:raBx30ouDedxm4xM@chatgptblog.y5aby2d.mongodb.net/',
   options,
 );
 mongoose_connection.on('error', (error) => {
