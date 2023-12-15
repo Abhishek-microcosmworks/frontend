@@ -26,6 +26,8 @@ function Register({ setShowLogin }) {
   const [incorrectAttempts, setIncorrectAttempts] = useState(0);
   const [otpExpired, setOtpExpired] = useState(false);
 
+  const serverUrl = 'https://mediaconnects.live/api';
+
   const startTimer = () => {
     let count = 30;
     const timerId = setInterval(() => {
@@ -53,7 +55,7 @@ function Register({ setShowLogin }) {
     console.log('handle otp', email);
     localStorage.setItem('email', email);
     try {
-      const res = await fetch('http://3.233.72.68/:5000/send-otp', {
+      const res = await fetch(`${serverUrl}/send-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +87,7 @@ function Register({ setShowLogin }) {
     console.log('handle register', userEmail);
     console.log('email before sending request', userEmail);
 
-    const res = await fetch('http://3.233.72.68/:5000/register', {
+    const res = await fetch(`${serverUrl}/register`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -131,7 +133,7 @@ function Register({ setShowLogin }) {
     console.log('my typing otp is/', otp);
     const userEmail = localStorage.getItem('email');
 
-    const res = await fetch('http://3.233.72.68/:5000/resend-otp', {
+    const res = await fetch(`${serverUrl}/resend-otp`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

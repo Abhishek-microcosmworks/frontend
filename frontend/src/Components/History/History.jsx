@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 
 function History() {
   const [historyDetails, setHistoryDetails] = useState([]);
+  const serverUrl = 'https://mediaconnects.live/api';
   const handleGetHistory = async () => {
     const email = localStorage.getItem('email');
     try {
-      const res = await fetch('http://3.233.72.68/:5000/history', {
+      const res = await fetch(`${serverUrl}/history`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

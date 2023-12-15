@@ -8,7 +8,7 @@ export const verifyOtp = async (req, res) => {
     const { email } = req.body;
     const user = await RegisterData.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'Please enter email' });
+      return res.status(404).json({ message: 'Email not found!' });
     }
     if (user) {
       // console.log("hiuj", user)

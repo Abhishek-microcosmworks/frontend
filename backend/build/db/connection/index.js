@@ -5,7 +5,8 @@ const options = {
   connectTimeoutMs: 5000
 };
 
-const mongoose_connection = mongoose.createConnection('mongodb+srv://abhishek:raBx30ouDedxm4xM@chatgptblog.y5aby2d.mongodb.net/', options);
+console.log(DATABASE_URL);
+const mongoose_connection = mongoose.createConnection(DATABASE_URL, options);
 mongoose_connection.on('error', error => {
   console.error(`error on ${DATABASE_URL} Error \n${error.message}`);
   throw error.message;

@@ -21,11 +21,13 @@ function Header(
   },
 ) {
   const navigate = useNavigate();
+  const serverUrl = 'https://mediaconnects.live/api';
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     // console.log('logout token', token);
     try {
-      const response = await fetch('http://3.233.72.68/:5000/logout', {
+      // http://3.233.72.68/:5000/logout
+      const response = await fetch(`${serverUrl}/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
