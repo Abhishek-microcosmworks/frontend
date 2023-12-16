@@ -144,7 +144,7 @@ function Popup({
   };
 
   const handleCloseExpandedImage = () => {
-    console.log('closed-called');
+    setExpandedImage(false);
   };
 
   const handleKeyDown = (e) => {
@@ -157,98 +157,101 @@ function Popup({
     <div className={showHideClassName}>
       <div className="popup-main">
         <div className="close-icon">
-          <button type="button" onClick={handleClose}>
+          <button type="button" onClick={expandedImage ? handleCloseExpandedImage : handleClose}>
             <img src={closeIcon} alt="close-icon" height={30} width={30} />
           </button>
         </div>
-        {expandedImage && (
+        {expandedImage ? (
           <div role="button" tabIndex={0} className="expanded-image-overlay" onClick={handleCloseExpandedImage} onKeyDown={handleKeyDown}>
             <div className="expanded-image-container">
               <img src={expandedImage} alt="expanded" />
             </div>
           </div>
-        )}
-        { buttonClicked && (
-          <div className="image-container">
-            <div className="image-heading">
-              Generated Image
-            </div>
-            <div className="images">
-              <div className="generated-image">
-                <img src={imageUrl} alt="dummy" height={250} width={250} />
+        ) : (
+          buttonClicked && (
+            <div className="image-container">
+              <div className="image-heading">
+                Generated Image
               </div>
-              <div className="context-container">
-                <div className="context">
-                  <textarea
-                    id="textArea"
-                    className="input-textarea"
-                    placeholder="Enter the context"
-                    style={{
-                      overflowY: 'scroll',
-                      overflowX: 'hidden',
-                      backgroundColor: '#F1F2F4',
-                      borderRadius: '7px',
-                      border: 'none',
-                      outline: 'none',
-                      fontFamily: 'Noto Sans',
-                      resize: 'none',
-                      fontSize: '16px',
-                      fontWeight: '457',
-                      color: '#000000',
-                    }}
-                    value={blogContext}
-                    onChange={textChange}
-                  >
-                    {blogcontent}
-                  </textarea>
+              <div className="images">
+                <div className="generated-image">
+                  <img src={imageUrl} alt="dummy" height={250} width={250} />
                 </div>
-                <div className="generate-btns">
-                  <div className="context-btn">
-                    <button type="button" onClick={handleGenerateContext}>{contextGenerating ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Context'}</button>
+                <div className="context-container">
+                  <div className="context">
+                    <textarea
+                      id="textArea"
+                      className="input-textarea"
+                      placeholder="Enter the context"
+                      style={{
+                        overflowY: 'scroll',
+                        overflowX: 'hidden',
+                        backgroundColor: '#F1F2F4',
+                        borderRadius: '7px',
+                        border: 'none',
+                        outline: 'none',
+                        fontFamily: 'Noto Sans',
+                        resize: 'none',
+                        fontSize: '16px',
+                        fontWeight: '457',
+                        color: '#000000',
+                      }}
+                      value={blogContext}
+                      onChange={textChange}
+                    >
+                      {blogcontent}
+                    </textarea>
+                  </div>
+                  <div className="generate-btns">
+                    <div className="context-btn">
+                      <button type="button" onClick={handleGenerateContext}>{contextGenerating ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Context'}</button>
+                    </div>
                   </div>
                 </div>
+                <div className="generated-images">
+                  {imagesUrl.map((image) => (
+                    <div key={image.image_url} className="generated-image" onMouseEnter={() => handleImageHover(image.image_url)} onMouseLeave={handleImageLeave}>
+                      {hoveredImage === image.image_url && showButtons && (
+                        <div className="image-buttons">
+                          <button className="expand-btn" onClick={() => handleExpandClick(image.image_url)} type="button">
+                            Expand
+                          </button>
+                          <button className="select-btn" onClick={() => handleSelectClick(image.image_url)} type="button">
+                            Select
+                          </button>
+                        </div>
+                      )}
+                      <img src={image.image_url} alt="spinner" height={150} width={150} />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="generated-images">
-                {imagesUrl.map((image) => (
-                  <div key={image.image_url} className="generated-image" onMouseEnter={() => handleImageHover(image.image_url)} onMouseLeave={handleImageLeave}>
-                    {hoveredImage === image.image_url && showButtons && (
-                      <div className="image-buttons">
-                        <button className="expand-btn" onClick={() => handleExpandClick(image.image_url)} type="button">
-                          Expand
-                        </button>
-                        <button className="select-btn" onClick={() => handleSelectClick(image.image_url)} type="button">
-                          Select
-                        </button>
-                      </div>
-                    )}
-                    <img src={image.image_url} alt="spinner" height={150} width={150} />
+            </div>
+          )
+        )}
+        {!expandedImage && (
+          <div className="blog-container" style={{ height: buttonClicked ? '45%' : '100%' }}>
+            <div className="blog">
+              {children}
+            </div>
+            <div className="btns-container" style={{ marginTop: buttonClicked ? '15%' : '35%' }}>
+              {hideEditButton && (
+                <div className="edit-btn">
+                  <button onClick={handleEditClick} type="button">
+                    Edit
+                  </button>
+                </div>
+              )}
+              {
+                !editing && (
+                  <div className="image-btn">
+                    <button type="button" onClick={handleGenerateImage}>{isLoading ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Image'}</button>
                   </div>
-                ))}
-              </div>
+                )
+              }
             </div>
           </div>
         )}
-        <div className="blog-container" style={{ height: buttonClicked ? '45%' : '100%' }}>
-          <div className="blog">
-            {children}
-          </div>
-          <div className="btns-container" style={{ marginTop: buttonClicked ? '15%' : '35%' }}>
-            {hideEditButton && (
-              <div className="edit-btn">
-                <button onClick={handleEditClick} type="button">
-                  Edit
-                </button>
-              </div>
-            )}
-            {
-              !editing && (
-                <div className="image-btn">
-                  <button type="button" onClick={handleGenerateImage}>{isLoading ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Image'}</button>
-                </div>
-              )
-            }
-          </div>
-        </div>
       </div>
     </div>
   );
