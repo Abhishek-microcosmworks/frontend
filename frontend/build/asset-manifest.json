@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.e47dfbf7.css",
-    "main.js": "/static/js/main.1e1a831a.js",
+    "main.css": "/static/css/main.dd5f551d.css",
+    "main.js": "/static/js/main.8da41ce6.js",
     "static/media/loader.gif": "/static/media/loader.90672f1deffccbcdf4f1.gif",
     "static/media/noto-sans-devanagari-400-normal.woff": "/static/media/noto-sans-devanagari-400-normal.9ecc9ba0fbe6be5443a7.woff",
     "static/media/noto-sans-latin-ext-400-normal.woff": "/static/media/noto-sans-latin-ext-400-normal.5a973fb017d5f413e1e4.woff",
@@ -20,11 +20,11 @@
     "static/media/noto-sans-vietnamese-400-normal.woff2": "/static/media/noto-sans-vietnamese-400-normal.999fbba78534aa9c54f3.woff2",
     "static/media/noto-sans-greek-ext-400-normal.woff2": "/static/media/noto-sans-greek-ext-400-normal.a53d3a503b7febd2de61.woff2",
     "index.html": "/index.html",
-    "main.e47dfbf7.css.map": "/static/css/main.e47dfbf7.css.map",
-    "main.1e1a831a.js.map": "/static/js/main.1e1a831a.js.map"
+    "main.dd5f551d.css.map": "/static/css/main.dd5f551d.css.map",
+    "main.8da41ce6.js.map": "/static/js/main.8da41ce6.js.map"
   },
   "entrypoints": [
-    "static/css/main.e47dfbf7.css",
-    "static/js/main.1e1a831a.js"
+    "static/css/main.dd5f551d.css",
+    "static/js/main.8da41ce6.js"
   ]
 }
