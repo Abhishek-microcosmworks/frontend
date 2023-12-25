@@ -13,11 +13,7 @@
     flex-direction: column;
     height: 80%;
 }
-.heading{
-    font-size: 2em;
-    font-family:"Noto Sans";
-    
-}
+
 .input_label_email{
    height: 100%;
     padding: 0 8px;

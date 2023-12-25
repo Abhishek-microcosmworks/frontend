@@ -13,12 +13,9 @@ export const blogGeneration = async (req, res) => {
   const urls = req.body.urls || [];
   const email = req.body.email;
 
-  const blogContent = req.body.blogContent;
   let responsefinalContent;
   console.log(urls);
   console.log(`my url are :- ${urls} and blog Title is :- ${context} \n`);
-
-  // console.log("my title for chatgpt is *", title)
 
   try {
     const responses = await Promise.all(urls.map((url) => axios.get(url))); //mapping to scrap the content from each url

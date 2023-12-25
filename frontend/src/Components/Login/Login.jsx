@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import { Route, Routes } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+
 import Articles from '../Articles/Articles';
 
 import History from '../History/History';
@@ -11,6 +13,8 @@ import History from '../History/History';
 import Header from '../Header/Header';
 
 import companyLogo from '../../assets/images/Company_Logo.png';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import './Login.css';
 
@@ -45,11 +49,25 @@ function Login({ setShowLogin }) {
 
   const serverUrl = 'https://mediaconnects.live/api';
 
+  useEffect(() => {
+    if (showOtpForm) {
+      // Display toast message for 5 seconds
+      toast.success('Otp has been send to your Email', {
+        autoClose: 5000,
+        style: {
+          fontFamily: 'Noto Sans',
+          fontSize: '15px',
+          fontWeight: '600',
+          borderRadius: '14px',
+        },
+      });
+    }
+  }, [showOtpForm]);
+
   let userToken;
   const verifyToken = async () => {
     try {
       userToken = localStorage.getItem('token');
-      // console.log('getting token from local storage', userToken);
 
       const res = await fetch(`${serverUrl}/verify-token`, {
         method: 'POST',
@@ -58,16 +76,11 @@ function Login({ setShowLogin }) {
         },
         body: JSON.stringify({ userToken }),
       });
-      // console.log('token verify running');
       if (res.ok) {
-        const data = await res.json();
-        const expirationTime = data.decoded.exp;
-        console.log(expirationTime);
         setIsLoggedIn(true);
         setShowOtpForm(false);
       } else {
         const errorData = await res.json();
-        // console.log(errorData);
         if (errorData.expired) {
           localStorage.removeItem('token');
           localStorage.removeItem('email');
@@ -81,8 +94,6 @@ function Login({ setShowLogin }) {
   const autoVerifyToken = async () => {
     try {
       userToken = localStorage.getItem('token');
-      // console.log('getting token from local storage', userToken);
-
       const res = await fetch(`${serverUrl}/autoverify-token`, {
         method: 'POST',
         headers: {
@@ -90,7 +101,6 @@ function Login({ setShowLogin }) {
         },
         body: JSON.stringify({ userToken }),
       });
-      // console.log('token verify running');
       if (res.ok) {
         localStorage.removeItem('token');
         localStorage.removeItem('email');
@@ -149,7 +159,6 @@ function Login({ setShowLogin }) {
 
   const handleGetOtp = async () => {
     localStorage.setItem('email', email);
-    console.log('login clicked');
 
     try {
       const res = await fetch(`${serverUrl}/verify-login`, {
@@ -165,7 +174,6 @@ function Login({ setShowLogin }) {
         setDisableResend(false);
       } else {
         const errorData = await res.json();
-        // console.log('my some error', errorData);
         setErrorMessage(errorData.message);
       }
     } catch (error) {
@@ -176,11 +184,7 @@ function Login({ setShowLogin }) {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // console.log('my login email is', email);
     const userEmail = localStorage.getItem('email');
-    // console.log('user enterd otp', otp);
-    // localStorage.setItem('otpEntered', otp);
-    // const enteredOtp = localStorage.getItem('otpEntered');
 
     const res = await fetch(`${serverUrl}/login`, {
       method: 'POST',
@@ -192,15 +196,10 @@ function Login({ setShowLogin }) {
     if (res.ok) {
       const data = await res.json();
       const tokenValue = data.token;
-      // console.log(data);
-      // console.log('my token', tokenValue);
       localStorage.setItem('token', tokenValue);
       localStorage.setItem('email', email);
       setIsLoggedIn(true);
-      // setDisableResend(false);
-      // localStorage.removeItem('otpEntered');
     } else {
-      // console.log('no input ', res);
       const errorData = await res.json();
       console.log('my errors', errorData);
       if (errorData.message === 'please fill otp') {
@@ -218,8 +217,6 @@ function Login({ setShowLogin }) {
         setOtpExpired(true);
         setDisableResend(false);
         startTimer();
-
-        // setOtp('');
       } else {
         setLoginError('An error occurred during login');
       }
@@ -231,13 +228,7 @@ function Login({ setShowLogin }) {
     setDisableResend(true);
     startTimer(30);
 
-    // if (disableResend) {
-    //   return;
-    // }
-
     const userEmail = localStorage.getItem('email');
-    // localStorage.setItem('otpEntered', otp);
-    // const enteredOtp = localStorage.getItem('otpEntered');
 
     const res = await fetch(`${serverUrl}/resend-otp`, {
       method: 'POST',
@@ -246,17 +237,13 @@ function Login({ setShowLogin }) {
       },
       body: JSON.stringify({ userEmail, otp }),
     });
-    // console.log('resend otp', res);
     if (res.ok) {
       setSuccessMsg('OTP resent successfully');
       setIsLoggedIn(true);
       const data = await res.json();
       const tokenValue = data.token;
-      console.log('resend otp', data);
-      // console.log('my token', tokenValue);
       localStorage.setItem('token', tokenValue);
       localStorage.setItem('email', email);
-      // localStorage.removeItem('otpEntered');
       setDisableResend(true);
       setTimer(30);
       startTimer();
@@ -311,6 +298,7 @@ function Login({ setShowLogin }) {
         <div>
           {showOtpForm ? (
             <>
+              <ToastContainer />
               <div className="logo">
                 <img src={companyLogo} alt="Logo" />
               </div>
@@ -368,10 +356,10 @@ function Login({ setShowLogin }) {
               </div>
               <div className="login_container">
                 <div className="heading">Login</div>
-                <button className="google-button" type="button">
+                {/* <button className="google-button" type="button">
                   Continue with Google
                 </button>
-                <span className="or">or</span>
+                <span className="or">or</span> */}
                 <div className="email_label">
                   <input
                     className="input_label_email"

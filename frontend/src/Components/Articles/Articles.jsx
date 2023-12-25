@@ -101,8 +101,9 @@ function Articles() {
 
   return (
     <div className="blog_container">
-      <div className="heading">Generate blog based on your context</div>
+      <div className="heading">Craft Your Blog: Building from References</div>
       <div className="title_label">
+        <span className="refernce_url_txt">Blog Title</span>
         <input
           className="input_label_context"
           type="search context"
@@ -113,6 +114,7 @@ function Articles() {
         />
       </div>
       <div className="url_label">
+        <span className="refernce_url_txt">Reference URL</span>
         <input
           className="input_label_url"
           placeholder="Reference URL"
@@ -125,24 +127,13 @@ function Articles() {
       </div>
 
       <div id="textareaBox" rows="2" cols="50" />
-      {/* {textareas.map((textarea, index) => (
-        <div key={index}>{textarea}</div>
-      ))} */}
-      {/* {editing ? (
-        <button onClick={handleSaveClick} type="button">
-          Save
-        </button>
-      ) : (
-        <button onClick={handleEditClick} type="button">
-          Edit
-        </button>
-      )} */}
       <div className="btn_blog">
         <button
           onClick={handleSubmit}
+          style={{ backgroundColor: !context || !url ? '#66b2b2' : '#008080' }}
           className="btn_blog_generator"
-          // style={{ height: '30px', width: '40%', marginTop: '15px' }}
           type="submit"
+          disabled={!context || !url}
         >
           {loader ? (
             <img src={spinner} alt="spinner" width="20px" height="20px" />

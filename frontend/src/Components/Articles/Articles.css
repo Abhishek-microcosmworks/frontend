@@ -11,16 +11,18 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    min-width: 500px;
     height: 100%;
 }
 .heading{
     font-size: 2em;
-    margin-top: 7%;
+    margin-top: 5%;
     font-family:"Noto Sans";
-    
+    font-weight: 600;
 }
 .input_label_context{
-   height: 100%;
+    min-height: 60vh;
+    height: 100%;
     padding: 0 8px;
     vertical-align: middle;
     border-radius: 14px;
@@ -35,7 +37,6 @@
     font-weight: normal;
     outline: none;
     /* margin-top: 20px; */
-
 }
 .input_label_url{
     height: 100%;
@@ -52,7 +53,6 @@
      line-height: 18px;
      font-weight: normal;
      outline: none;
- 
  }
 
 .input_label_context::placeholder {
@@ -74,13 +74,17 @@
     height: 50px;
     margin-top: 4%;
 }
+.refernce_url_txt{
+   font-family: "Noto Sans";
+   font-size: 20px;
+   font-weight: 500;
+}
 .url_label
 {
     width: 40%;
      max-height: 50%;
      height: 50px;
-     margin-top: 2%;
- 
+     margin-top: 5%;
 }
 
 .btn_blog{
@@ -88,20 +92,22 @@
     margin-left:  2%;
     max-height: 50%;
     height: 50px;
+    margin-top: 5%;
 }
 
 .btn_blog_generator{
-    
     width: 42%;
+    height: 50px;
     padding: 10px;
-    background-color: #008080;
+    background-color: #96f8f8;
     color: #fff;
     border: none;
     border-radius: 14px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 500;
     font-family:"Noto Sans";
-    margin-top: 6%;
+    margin-top: 5%;
 }
 
 .save-btn{

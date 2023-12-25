@@ -24,7 +24,6 @@ function Header(
   const serverUrl = 'https://mediaconnects.live/api';
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
-    // console.log('logout token', token);
     try {
       const response = await fetch(`${serverUrl}/logout`, {
         method: 'POST',
@@ -37,7 +36,6 @@ function Header(
       if (response.ok) {
         setIsLoggedIn(false);
         setEmail('');
-        // console.log('logout from login ', isLoggedIn);
         setShowOtpForm(false);
         localStorage.removeItem('token');
         localStorage.removeItem('email');

@@ -1,21 +1,22 @@
 import OpenAI from 'openai';
 
-export const generateEmbeddings = async (req, res) => {
+const openai = new OpenAI();
 
-  const openai = new OpenAI();
+// Function to get embeddings using OpenAI GPT-3.5
+export async function generateEmbeddings(text) {
   try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{
-        role: 'system',
-        content: `Please create a context using the blog keep it simple and precise not more then 20 words please make it a meaning full sentence for an ai image generation ${req.body.blogContent}`
-      }]
+
+    const response = await openai.embeddings.create({
+      model: 'text-embedding-ada-002',
+      input: text
     });
 
-    res.status(200).send(response);
-  } catch (error) {
-    console.log(error);
+    console.log(response);
+    const embeddings = response.choices[0].embedding;
 
-    res.status(500).send(error.message);
+    return embeddings;
+  } catch (error) {
+    console.error('Error getting embeddings:', error.message);
+    throw error;
   }
-};
+}
