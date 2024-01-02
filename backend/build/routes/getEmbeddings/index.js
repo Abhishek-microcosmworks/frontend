@@ -1,1 +1,1 @@
-export { generateEmbeddings } from './getEmbeddings.js';
+export { getPersonalisedBlog } from './getEmbeddings.js';

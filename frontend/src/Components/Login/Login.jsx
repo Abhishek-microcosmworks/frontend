@@ -47,7 +47,8 @@ function Login({ setShowLogin }) {
     }, 1000);
   };
 
-  const serverUrl = 'https://mediaconnects.live/api';
+  // const serverUrl = 'https://mediaconnects.live/api';
+  const serverUrl = 'http://localhost:5000/api';
 
   useEffect(() => {
     if (showOtpForm) {

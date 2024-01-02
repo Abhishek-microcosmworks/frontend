@@ -26,7 +26,8 @@ function Articles() {
   const [blogObject, setBlogObject] = useState({});
   const [buttonClicked, setButtonClicked] = useState(false);
 
-  const serverUrl = 'https://mediaconnects.live/api';
+  // const serverUrl = 'https://mediaconnects.live/api';
+  const serverUrl = 'http://localhost:5000/api';
 
   useEffect(() => {
     if (!showPopup) {
@@ -38,15 +39,16 @@ function Articles() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    const email = localStorage.getItem('email');
+    // const email = localStorage.getItem('email');
     try {
       const { data } = await axios.post(
-        `${serverUrl}/article`,
+        `${serverUrl}/blog/embeddings`,
         {
-          urls: [url, url1],
-          context,
-          blogcontent,
-          email,
+          // urls: [url, url1],
+          // context,
+          // blogcontent,
+          // email,
+          text: 'paper, book, blog',
         },
         {
           headers: {

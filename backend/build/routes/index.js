@@ -7,7 +7,7 @@ import { editImage } from './editimage/index.js';
 import { generateContext } from './generateContext/index.js';
 import { getImages } from './getImages/index.js';
 import { editBlog } from './editBlog/index.js';
-import { generateEmbeddings } from './getEmbeddings/index.js';
+import { getPersonalisedBlog } from './getEmbeddings/index.js';
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -28,6 +28,6 @@ router.post('/edit-image', editImage);
 router.post('/gen-context', generateContext);
 router.post('/blog/getImages', getImages);
 router.post('/blog/edit/blog', editBlog);
-router.post('/blog/embeddings', generateEmbeddings);
+router.post('/blog/embeddings', getPersonalisedBlog);
 
 export default router;
