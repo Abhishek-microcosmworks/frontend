@@ -2,7 +2,7 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import sbd from 'sbd';
 
-export const updatePinecone = async (client, indexName, scrappedContent, email) => {
+export const updatePinecone = async (client, indexName, scrappedContent, email, requestId) => {
 
   try {
     for (const section of scrappedContent){
@@ -64,7 +64,8 @@ export const updatePinecone = async (client, indexName, scrappedContent, email) 
             chunk.metadata,
             { loc: JSON.stringify(chunk.metadata.loc) },
             { pageContent: chunk.pageContent },
-            { txtPath: `${email}_document_${Date.now()}_${i}` }
+            { txtPath: `${email}_document_${Date.now()}_${i}` },
+            { requestId: requestId }
           ),
         };
   

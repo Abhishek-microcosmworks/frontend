@@ -6,6 +6,8 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+import { v4 as uuidv4 } from 'uuid';
+
 // import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
 import spinner from '../../assets/images/loader.gif';
@@ -46,10 +48,13 @@ function Articles() {
     setLoader(true);
     const email = localStorage.getItem('email');
     const userToken = localStorage.getItem('token');
+
+    const requestId = uuidv4();
     try {
       const { data } = await axios.post(
         `${serverUrl}/article`,
         {
+          requestId,
           urls: url,
           context,
           blogcontent,
@@ -65,7 +70,6 @@ function Articles() {
       console.log('openAI data is', data);
       // setPercentage(data.percentage);
       // setCreationState(data.state);
-      //
       setBlogObject(data.data);
       const blogData = data.data.finalContent;
       console.log('my data is', blogData);

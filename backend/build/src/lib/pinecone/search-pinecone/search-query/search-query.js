@@ -1,6 +1,6 @@
 import { Pinecone } from '@pinecone-database/pinecone';
 
-export async function searchQuery(queryEmbedding, indexName) {
+export async function searchQuery(queryEmbedding, indexName, requestId) {
 
   try {
 
@@ -12,7 +12,15 @@ export async function searchQuery(queryEmbedding, indexName) {
     const pinecoe_index = client.index(indexName);
 
     // Search for nearest neighbors in Pinecone
-    const searchResult = await pinecoe_index.query({ vector: queryEmbedding, topK: 5, includeValues: true, includeMetadata: true });
+    const searchResult = await pinecoe_index.query({
+      vector: queryEmbedding,
+      filter: {
+        "requestId": { "$eq": requestId }
+      },
+      topK: 5,
+      includeValues: true,
+      includeMetadata: true
+    });
 
     // Extract pageContent from each match and concatenate them into a single string
     const pageContents = searchResult.matches.map(match => match.metadata.pageContent);

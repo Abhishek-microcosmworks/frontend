@@ -20,9 +20,11 @@ export const generateBlog = async (req, res) => {
 
   const email = req.body.email;
 
+  const requestId = req.body.requestId;
+
   const blog_array = urls.split(',')
 
-  const blog_data = await getBlogData(blog_array, email, 101)
+  const blog_data = await getBlogData(blog_array, email, requestId)
 
   await generateContext(blog_data);
 
@@ -54,7 +56,7 @@ export const generateBlog = async (req, res) => {
     return
   }
 
-  const updatedIndex = await updatePinecone(client, indexName, blogSections.data, email)
+  const updatedIndex = await updatePinecone(client, indexName, blogSections.data, email, requestId)
 
   if(updatedIndex.error === true){
     res.status(500).json({ message: updatedIndex.message })
@@ -70,7 +72,7 @@ export const generateBlog = async (req, res) => {
     return
   }
 
-  const introductionSearchedData = await searchQuery(introductionQueryEmbedding.data, indexName);
+  const introductionSearchedData = await searchQuery(introductionQueryEmbedding.data, indexName, requestId);
 
   if(introductionSearchedData.error === true){
     res.status(500).json({ message: introductionSearchedData.message })
