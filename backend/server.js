@@ -1,11 +1,8 @@
-// import OpenAI from "openai";
 import express from 'express';
-// import axios from "axios";
 import router from './routes/index.js';
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import cors from 'cors';
-// import * as cheerio from 'cheerio';
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,7 +19,6 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
 app.use("/api",router);
 
 app.listen(PORT, () => {

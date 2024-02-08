@@ -1,5 +1,1 @@
-import { generateOtp, otpExpirationTime } from './libs/generateOtp/index.js';
-import { sendOtpEmail } from './libs/emailConfig/index.js';
-import { generateToken, expirationTime } from './libs/generateToken/generateToken.js';
-
-export { generateOtp, sendOtpEmail, generateToken, expirationTime, otpExpirationTime };
+export { generateOtp, sendOtpEmail, verifyEmail, generateToken, expireOtp, findOtp, findBlog, expirationTime, otpExpirationTime } from './libs/index.js';

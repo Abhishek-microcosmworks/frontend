@@ -1,3 +1,1 @@
-import { generateToken, expirationTime } from './generateToken';
-
-export { generateToken, expirationTime };
+export { generateToken, expirationTime } from './generateToken.js';

@@ -4,21 +4,23 @@
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 900px;
-    margin: 7% auto;
+    /* margin: 7% auto; */
+    margin-top: 7%;
+    margin-left: 22%;
     width: 60%;
     text-align: center;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     flex-direction: column;
-    min-width: 500px;
-    height: 100%;
+    /* min-width: 500px; */
+    height: 55%;
 }
-.heading{
-    font-size: 2em;
-    margin-top: 5%;
+.heading_text{
+    font-size: 40px;
     font-family:"Noto Sans";
     font-weight: 500;
+    margin-top: 7%;
 }
 .input_label_context{
     min-height: 60vh;
@@ -69,10 +71,9 @@
 }
 .title_label{
     width: 40%;
-   margin-top: 4%;
     max-height: 50%;
     height: 50px;
-    margin-top: 4%;
+    margin-top: 7%;
 }
 .refernce_url_txt{
    font-family: "Noto Sans";
@@ -133,16 +134,72 @@
 
 @media (max-width: 800px) {
     .blog_container {
-        width: 90%; 
+        width: 85%;
+        margin-left: 2px;
+    }
+
+    .heading_text{
+        font-size: 20px;
+        font-family:"Noto Sans";
+        font-weight: 500;
+        margin-top: 7%;
+    }
+
+    .btn_blog_generator{
+        width: 50%;
+        height: 40px;
+        padding: 10px;
+        background-color: #96f8f8;
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 500;
+        font-family:"Noto Sans";
+        margin-top: 5%;
     }
 
     .title_label,
     .url_label,
     .btn_blog{
-        width: 100%; 
+        width: 100%;
+        margin-top: 15%;
+        margin-left: -5%;
     }
 
     .btn_blog {
-        margin: 2% 0; 
+        margin: 13% 0; 
     }
 }
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 93%   ); /* semi-transparent black overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure it appears above other content */
+  }
+  
+  .progress-container {
+    text-align: center;
+    /* background: #fff; or any other color for the circular progress bar container */
+    padding: 20px;
+    /* border-radius: 8px; */
+    /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+  }
+
+  .CircularProgressbar{
+    width: 50% !important;
+  }
+
+  .state-container{
+    color: #fff;
+    font-size: 16px;
+    margin-top: 8%;
+  }

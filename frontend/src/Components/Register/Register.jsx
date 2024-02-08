@@ -51,48 +51,41 @@ function Register({ setShowLogin }) {
     setOtp(e.target.value);
   };
 
-  const handleGetOtp = async () => {
-    console.log('handle otp', email);
-    localStorage.setItem('email', email);
+  const handleRegister = async () => {
     try {
-      const res = await fetch(`${serverUrl}/send-otp`, {
+      const res = await fetch(`${serverUrl}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, name, otp }),
+        body: JSON.stringify({ email, name }),
       });
-      console.log('email is being noticed', email);
+
+      console.log(res);
 
       if (res.ok) {
         setSuccessMsg('OTP sent successfully');
         setShowOtpForm(true);
+        localStorage.setItem('email', email);
       } else {
         const errorData = await res.json();
         setErrorMessage(errorData.error);
-        setIncorrectAttempts((prevAttempts) => prevAttempts + 1);
-        if (incorrectAttempts >= 3) {
-          setDisableResend(false); // Enable the resend button
-          startTimer();
-        }
       }
     } catch (error) {
       console.error('Error sending OTP:', error);
     }
   };
 
-  const handleRegister = async (e) => {
+  const handleGetOtp = async (e) => {
     e.preventDefault();
-    const userEmail = localStorage.getItem('email');
-    console.log('handle register', userEmail);
-    console.log('email before sending request', userEmail);
+    console.log(e.target);
 
-    const res = await fetch(`${serverUrl}/register`, {
+    const res = await fetch(`${serverUrl}/verify-otp`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ userEmail, name, otp }),
+      body: JSON.stringify({ email, otp }),
     });
     console.log('register details, ', res);
     if (res.ok) {
@@ -100,12 +93,8 @@ function Register({ setShowLogin }) {
       setIsLoggedIn(true);
       const data = await res.json();
       const tokenValue = data.token;
-      // console.log(data);
-      // console.log('my token', tokenValue);
       localStorage.setItem('token', tokenValue);
-      localStorage.setItem('email', userEmail);
     } else {
-      // console.log('no input ', res);
       const errorData = await res.json();
       console.log('my errors', errorData);
       if (errorData.error === 'please fill otp') {
@@ -147,7 +136,6 @@ function Register({ setShowLogin }) {
       const data = await res.json();
       const tokenValue = data.token;
       console.log('resend otp', data);
-      // console.log('my token', tokenValue);
       localStorage.setItem('token', tokenValue);
       localStorage.setItem('email', email);
       // localStorage.removeItem('otpEntered');
@@ -219,10 +207,10 @@ function Register({ setShowLogin }) {
                 )}
                 <button
                   className="btn_register "
-                  onClick={handleRegister}
+                  onClick={handleGetOtp}
                   type="button"
                 >
-                  Register
+                  Get Otp
                 </button>
                 {successMsg && (
                   <div style={{ color: 'green' }}>{successMsg}</div>
@@ -239,7 +227,7 @@ function Register({ setShowLogin }) {
               </div>
               <div className="register_container">
                 <div className="heading">Register</div>
-                <div className="email_label">
+                <div className="email_label_reg">
                   <input
                     className="input_label_email"
                     type="email"
@@ -263,17 +251,17 @@ function Register({ setShowLogin }) {
                 </div>
                 <button
                   className="get_otp"
-                  onClick={handleGetOtp}
+                  onClick={handleRegister}
                   type="button"
                 >
-                  Get Otp
+                  Register
                 </button>
 
                 {successMsg && (
-                  <div style={{ color: 'green' }}>{successMsg}</div>
+                  <div className="successs-msg">{successMsg}</div>
                 )}
                 {errorMessage && (
-                  <div style={{ color: 'red' }}>{errorMessage}</div>
+                  <div className="fail-msg">{errorMessage}</div>
                 )}
                 <div className="noaccount_container">
                   <div>

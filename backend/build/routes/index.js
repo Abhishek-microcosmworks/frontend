@@ -1,33 +1,23 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { registerCredential, loginCredential, verifyOtp, blogGeneration, getHistory, verifyToken, getOtp, userLogout, autoVerifyToken, resendOtp } from './summary/index.js';
-import { generateImage } from './generateImages/index.js';
-import { generateKeywords } from './generateKeywords/index.js';
-import { editImage } from './editimage/index.js';
-import { generateContext } from './generateContext/index.js';
-import { getImages } from './getImages/index.js';
-import { editBlog } from './editBlog/index.js';
-import { getPersonalisedBlog } from './getEmbeddings/index.js';
+import { login, verifyOtp, register, resendOtp, editBlog, editImage, getContext, generateImage, generateKeywords, generateBlog, getImages, generateEmbeddings, logout, getHistory } from '../controller/index.js';
+import { authenticateToken } from '../src/lib/index.js';
 
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.post('/article', blogGeneration);
-router.post('/register', registerCredential);
-router.post('/login', loginCredential);
-router.post('/send-otp', getOtp);
-router.post('/verify-login', verifyOtp);
-router.post('/history', getHistory);
-router.post('/verify-token', verifyToken);
-router.post('/autoverify-token', autoVerifyToken);
-router.post('/logout', userLogout);
+router.post('/register', register);
+router.post('/verify-otp', verifyOtp);
+router.post('/login', login);
+router.post('/logout', logout);
 router.post('/resend-otp', resendOtp);
-router.post('/gen-image', generateImage);
-router.post('/gen-keywords', generateKeywords);
-router.post('/edit-image', editImage);
-router.post('/gen-context', generateContext);
-router.post('/blog/getImages', getImages);
-router.post('/blog/edit/blog', editBlog);
-router.post('/blog/embeddings', getPersonalisedBlog);
+
+router.post('/history', authenticateToken, getHistory);
+router.post('/article', authenticateToken, generateBlog);
+router.post('/gen-image', authenticateToken, generateImage);
+router.post('/edit-image', authenticateToken, editImage);
+router.post('/gen-context', authenticateToken, getContext);
+router.post('/blog/getImages', authenticateToken, getImages);
+router.post('/blog/edit/blog', authenticateToken, editBlog);
 
 export default router;

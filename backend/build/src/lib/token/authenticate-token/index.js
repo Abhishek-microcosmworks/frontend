@@ -1,0 +1,1 @@
+export { authenticateToken } from './authenticate-token.js';

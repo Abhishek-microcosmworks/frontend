@@ -86,7 +86,7 @@
     line-height: 18px;
     text-align: center; 
 }
-.email_label{
+.email_label_reg{
     width: 40%;
    margin-top: 2%;
     max-height: 50%;
@@ -111,19 +111,19 @@
 }
 
 .btn_register{
-    width: 42%;
+    width: 20%;
     margin-left:  2%;
     margin-top: 7%;
     padding: 10px;
-    background-color: #008080;
     color: #fff;
     border: none;
     border-radius: 14px;
     cursor: pointer;
-    font-size: 16px;
     margin-bottom: 10px;
     min-height: 55px;
     height: 100%;
+    background-color: rgb(10, 40, 30);
+    font-size: 16px;
 }
 .get_otp{
     background-color: rgb(10, 40, 30);
@@ -159,11 +159,18 @@
  
 }
 
-@media (max-width: 800px) {
-    .blog_container {
-        width: 90%; 
-    }
+.successs-msg{
+    color: green;
+    margin-top: 1%;
+}
 
+.fail-msg{
+    color: red;
+    margin-top: 1%;
+}
+
+@media (max-width: 800px) {
+    
     .email_label,.name_label,
     .otp_label,.get_otp,
     .btn_register {

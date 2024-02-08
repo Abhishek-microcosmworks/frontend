@@ -1,25 +1,71 @@
 .login_container{
     background-color: #fff;
-    padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 800px;
-    margin: 5% auto;
+    margin-left: 1%;
+    margin-top: 2%;
     width: 60%;
     text-align: center;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    opacity: 0.95;
+}
+
+.otp-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    max-width: 800px;
+    margin: 3% auto;
+    width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 80%;
+    height: 27%;
+  }
+
+.container-login-content{
+    width: 100%;
+    height: 60%;
+    margin-top: 4%;
 }
 
-.input_label_email{
-   height: 100%;
+/* Add a media query for smaller screens */
+@media (max-width: 768px) {
+
+    .otp-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        /* padding: 20px; */
+        /* text-align: center; */
+        max-width: 800px;
+        margin-top: 30%;
+        width: 80%;
+        /* display: flex; */
+        /* justify-content: center; */
+        /* align-items: center; */
+        /* flex-direction: column; */
+        height: 40%;
+      }
+
+    .login_container {
+        width: 80%; /* Adjust the width for smaller screens */
+    }
+}
+
+.input_label_email_login{
+    height: 100%;
     padding: 0 8px;
     vertical-align: middle;
     border-radius: 14px;
-    width: 100%;
+    width: 42%;
     min-height: 36px;
     background-color: #ffffff;
     border: 1px solid rgba(36,28,21,0.3);
@@ -30,8 +76,8 @@
     font-weight: normal;
     outline: none;
     margin-top: 2%;
-
 }
+
 .input_label_otp{
     height: 100%;
      padding: 0 8px;
@@ -49,27 +95,35 @@
      outline: none;
      margin-top: 12%;
  
- }
+}
 
-.input_label_email::placeholder {
+
+
+.input_label_email_login::placeholder {
     color: #999; 
     font-size: 16px;
     line-height: 18px;
     text-align: center; 
 }
+
 .input_label_otp::placeholder {
     color: #999; 
     font-size: 16px;
     line-height: 18px;
     text-align: center; 
 }
+
 .email_label{
-    width: 40%;
-   margin-top: 2%;
+    width: 97%;
+    margin-top: 2%;
     max-height: 50%;
     height: 50px;
     margin-bottom: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .otp_label
 {
     width: 40%;
@@ -78,6 +132,7 @@
      margin-bottom: 2%;
  
 }
+
 .or{
     margin-top: 1.2%;
     font-size: 20px;
@@ -100,10 +155,11 @@
     height: 100%;
     font-family:"Noto Sans";
 }
-.get_otp{
+
+.get_otp_login{
     background-color: rgb(10, 40, 30);
     width: 42%;
-    margin-left:  2%;
+    /* margin-left: 1%; */
     margin-top: 2%;
     padding: 10px;
     color: #fff;
@@ -112,9 +168,32 @@
     cursor: pointer;
     font-size: 16px;
     min-height: 55px;
-    height: 100%;
+    height: 1%;
     font-family:"Noto Sans";
 }
+
+.info-container{
+    background: transparent; 
+    width: 80%;
+    opacity: 0.95;
+    border-radius: 10px;
+    /* margin-left: 5%;
+    margin-bottom: 2%; */
+}
+
+.heading{
+    font-size: 40px;
+    font-family:"Noto Sans";
+    font-weight: 500;
+    margin-top: 10%;
+}
+
+.heading-text span{
+  font-weight: 500;
+  font-family: "Noto Sans";
+  font-size: 31px;
+}
+
 .noaccount_container{
     display: flex;
     flex-direction: row;
@@ -123,18 +202,20 @@
     margin-top: 1%;
     font-family:"Noto Sans";
 }
+
 .noaccount_text{
     opacity: 50%;
-
 }
+
 .register_here span{ 
     text-decoration: none;
     font-size: 16px;
     color: #5551FF;
     font-weight: 500;
     font-family:"Noto Sans";
- 
+    cursor: pointer;
 }
+
 .transparent-overlay {
     position: fixed;
     top: 0;
@@ -143,70 +224,130 @@
     height: 100%;
     background: whitesmoke;
     opacity: 0.6;
-
   }
+
   .loading-gif{
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
     margin-top: 3%;
-
   }
-   .resend-otp-btn{
 
-    color: #008080;
+   .resend-otp-btn{
+    color: green;
     margin-top: 7px;
     font-size: 18px;
-  }
-  .resend-otp-btn :hover{
-
-    color: #801a00;
-    
+    cursor: pointer;
   }
 
 @media (max-width: 800px) {
-    .blog_container {
-        width: 90%; 
+
+    .login_container{
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 23%;
+        width: 82%;
+        margin-left: 9%;
+        height: 60%;
+        opacity: 0.95;
     }
 
-    .email_label,
-    .otp_label,.get_otp,
+    .info-container{ 
+    width: 100%;
+    }
+
+    .heading-text{
+        width: 100%;
+        margin-left: 2%;
+    }
+
+    .heading-text span{
+        font-weight: 500;
+        font-family: "Noto Sans";
+        font-size: 21px;
+      }
+
+    /* .blog_container {
+        width: 90%; 
+    } */
+
+    .email_label{
+        width: 97%;
+        margin-top: 2%;
+        max-height: 50%;
+        height: 50px;
+        margin-bottom: 2%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .otp-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        /* padding: 20px; */
+        /* text-align: center; */
+        max-width: 800px;
+        margin-top: 30%;
+        width: 80%;
+        /* display: flex; */
+        /* justify-content: center; */
+        /* align-items: center; */
+        /* flex-direction: column; */
+        height: 40%;
+      }
+
+    .otp_label,.get_otp_login,
     .btn_login,.google-button {
-        width: 100%; 
+        width: 97%; 
+    }
+
+    .container-login-content{
+        width: 100%;
+        height: 80%;
+        margin-top: 4%;
+    }
+
+    .input_label_email_login{
+        height: 100%;
+        /* padding: 0 8px; */
+        vertical-align: middle;
+        border-radius: 14px;
+        width: 100%;
+        min-height: 36px;
+        background-color: #ffffff;
+        border: 1px solid rgba(36,28,21,0.3);
+        transition: all 0.2s ease-in-out 0s;
+        font-size: 16px;
+        font-family:"Noto Sans";
+        line-height: 18px;
+        font-weight: normal;
+        outline: none;
+        margin-top: 2%;
+    }
+
+    .heading{
+        font-size: 30px;
+        font-family:"Noto Sans";
+        font-weight: 500;
+        margin-top: 20%;
     }
 
     .btn_login{
         margin-top: 20%;
     }
-    .get_otp{
+    .get_otp_login{
         margin-top: 6%;
-        width: 100%;
+        width: 97%;
     }
 }
 .logo{
     height: 100%;
-    margin-left: 30px;
-    /* margin-top: 10px; */
-  }
-  
-
-  
-
-  .otp-container {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: center;
-    max-width: 800px;
-    margin: 3% auto;
-    width: 60%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 80%;
+    max-height: 70px;
+    background-color: #ffffff;
   }
 
   .otp-input {
@@ -226,12 +367,16 @@
 
   .submit-btn {
     margin-top: 20px;
-    background-color: #008080;
     color: #fff;
     padding: 10px 20px;
-    font-size: 16px;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
     margin-bottom: 10px;
+    background-color: rgb(10, 40, 30);
+    width: 20%;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 16px;
+    min-height: 55px;
+    height: 1%;
+    font-family:"Noto Sans";
   }

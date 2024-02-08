@@ -1,0 +1,1 @@
+export { generateBlog } from './generate-new-blog.js';

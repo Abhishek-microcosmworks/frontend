@@ -1,73 +1,101 @@
-
+/* Default styles for larger screens */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: transparent;
-    color: rgb(0, 6, 6);
-    max-height: 50px;
-    height: 8%;
-    padding-top: 6px;
-
-    
-  }
-  .logo{
-    height: 100%;
-    margin-left: 30px;
-    /* margin-top: 10px; */
-  }
-  .logo img {
-    height: 10%; 
-    width: 300px;
-  }
-  .nav-links{
-    height: 50px;
-    width: 25%;
-    display: flex;
-    justify-content: space-evenly;
-    gap: 10%;
-    align-items: center;
-    margin-right:4%;
-
-    
-
-  }
-  .nav-links a {
-    color: #0a0000;
-    text-decoration: none;
-    font-weight: 500;
-    font-family: "Noto Sans";
-    font-size: 16px;
-    cursor: pointer;
-    
-
-    
-  }
-  
-  .nav-links a:hover {
-    color: #008080 !important;
-    cursor: pointer;
-  }
-
-  .btn_logout{
-    background-color: teal;
-    border: none;
-    width: 30%;
-    height: 30px;
-    font-size: 16px;
-    border-radius: 10px;
-    color: white;
-    font-weight: 400;
-    cursor: pointer;
-  }
-
-  .btn_logout:hover{
-    background-color: chocolate;
-
-    
-  } 
-
-@media (max-width:800px) {
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  color: rgb(0, 6, 6);
+  max-height: 70px;
+  height: 8%;
+  padding-top: 6px;
 }
-  
+
+.logo {
+  height: 100%;
+  max-height: 70px;
+  background-color: #ffffff;
+}
+
+.logo img {
+  height: 50%;
+  width: 300px;
+  margin-left: 2%;
+  margin-top: 1%;
+}
+
+.nav-links {
+  height: 50px;
+  width: 25%;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10%;
+  align-items: center;
+  margin-right: 4%;
+}
+
+.nav-links a {
+  color: #0a0000;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: "Noto Sans";
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.nav-links a:hover {
+  color: #008080 !important;
+  cursor: pointer;
+}
+
+.btn_logout {
+  background-color: teal;
+  border: none;
+  width: 30%;
+  height: 30px;
+  font-size: 16px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.btn_logout:hover {
+  background-color: #0a0000;
+}
+
+/* Media query for smaller screens */
+@media only screen and (max-width: 768px) {
+
+  .burger-icon-container{
+    margin-right: 3%;
+  }
+
+  .logo img {
+    width: 86%;
+    height: auto;
+    margin-top: 5%;
+  }
+
+  .nav-links {
+    display: none; /* Initially hide the links on small screens */
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .nav-links a {
+    margin-bottom: 10px;
+  }
+
+  .burger-icon {
+    display: block; /* Show the burger icon on small screens */
+    cursor: pointer;
+  }
+}
+
+/* Additional media query to hide burger icon on larger screens */
+@media only screen and (min-width: 769px) {
+  .burger-icon {
+    display: none;
+  }
+}

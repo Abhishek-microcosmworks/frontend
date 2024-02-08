@@ -6,11 +6,15 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+// import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+
 import spinner from '../../assets/images/loader.gif';
+
+import Popup from '../Popup/Popup';
 
 import './Articles.css';
 
-import Popup from '../Popup/Popup';
+import 'react-circular-progressbar/dist/styles.css';
 
 function Articles() {
   const [context, setContext] = useState('');
@@ -25,9 +29,10 @@ function Articles() {
   const [hideEditButton, setHideEditButton] = useState(true);
   const [blogObject, setBlogObject] = useState({});
   const [buttonClicked, setButtonClicked] = useState(false);
+  // const [percentage, setPercentage] = useState(0);
+  // const [creationState, setCreationState] = useState('Analizing');
 
-  // const serverUrl = 'https://mediaconnects.live/api';
-  const serverUrl = 'http://localhost:5000/api';
+  const serverUrl = 'https://mediaconnects.live/api';
 
   useEffect(() => {
     if (!showPopup) {
@@ -39,26 +44,30 @@ function Articles() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    // const email = localStorage.getItem('email');
+    const email = localStorage.getItem('email');
+    const userToken = localStorage.getItem('token');
     try {
       const { data } = await axios.post(
-        `${serverUrl}/blog/embeddings`,
+        `${serverUrl}/article`,
         {
-          // urls: [url, url1],
-          // context,
-          // blogcontent,
-          // email,
-          text: 'paper, book, blog',
+          urls: url,
+          context,
+          blogcontent,
+          email,
         },
         {
           headers: {
             'Content-Type': 'application/json',
+            authorization: userToken,
           },
         },
       );
       console.log('openAI data is', data);
+      // setPercentage(data.percentage);
+      // setCreationState(data.state);
+      //
       setBlogObject(data.data);
-      const blogData = data.data.blogData.finalContent;
+      const blogData = data.data.finalContent;
       console.log('my data is', blogData);
       let htmlData = '';
       blogData.split('\n').forEach((line) => {
@@ -67,7 +76,7 @@ function Articles() {
 
       setSummary(htmlData);
       setLoader(false);
-      console.log('so content title is ', context);
+      // console.log('so content title is ', context);
       setUrl(url);
       setUrl1(url1);
       setBlogContent(htmlData);
@@ -103,7 +112,7 @@ function Articles() {
 
   return (
     <div className="blog_container">
-      <div className="heading">Craft Your Blog: Building from References</div>
+      <div className="heading_text">Craft Your Blog: Building from References</div>
       <div className="title_label">
         <span className="refernce_url_txt">Blog Title</span>
         <input
@@ -144,6 +153,39 @@ function Articles() {
           )}
         </button>
       </div>
+      {/* {loader && (
+        <div className="backdrop">
+          <div className="progress-container">
+            <CircularProgressbar
+              value={percentage}
+              text={`${percentage}%`}
+              className="circular-progress"
+              styles={
+              buildStyles({
+                // Rotation of path and trail, in number of turns (0-1)
+                rotation: 0,
+                // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+                strokeLinecap: 'butt',
+                // Text size
+                textSize: '16px',
+                // How long animation takes to go from one percentage to another, in seconds
+                pathTransitionDuration: 0.5,
+                // Can specify path transition in more detail, or remove it entirely
+                // pathTransition: 'none',
+                // Colors
+                pathColor: 'rgb(0,128,128)',
+                textColor: 'teal',
+                trailColor: '#d6d6d6',
+                backgroundColor: '#3e98c7',
+              })
+            }
+            />
+            <div className="state-container">
+              <span>{`${creationState}...`}</span>
+            </div>
+          </div>
+        </div>
+      )} */}
       <Popup
         show={showPopup}
         handleClose={handleClosePopup}

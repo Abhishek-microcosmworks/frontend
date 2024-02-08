@@ -1,0 +1,1 @@
+export { updatePinecone } from './update-pinecone-index.js';

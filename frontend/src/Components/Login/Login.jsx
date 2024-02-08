@@ -12,7 +12,9 @@ import History from '../History/History';
 
 import Header from '../Header/Header';
 
-import companyLogo from '../../assets/images/Company_Logo.png';
+import companyLogo from '../../assets/images/media-connects-final.png';
+
+import loaderIcon from '../../assets/images/loader.gif';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,6 +22,7 @@ import './Login.css';
 
 function Login({ setShowLogin }) {
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState(null);
@@ -32,6 +35,16 @@ function Login({ setShowLogin }) {
   const [incorrectAttempts, setIncorrectAttempts] = useState(0);
   const [buttonOpacity, setButtonOpacity] = useState(1);
   const [otpExpired, setOtpExpired] = useState(false);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem('token');
+    const expireTime = localStorage.getItem('expiresAt');
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    if (authToken !== null && expireTime > currentTimestamp) {
+      setIsLoggedIn(true);
+      setIsLoading(false);
+    }
+  });
 
   const startTimer = () => {
     let count = 30;
@@ -47,9 +60,7 @@ function Login({ setShowLogin }) {
     }, 1000);
   };
 
-  // const serverUrl = 'https://mediaconnects.live/api';
-  const serverUrl = 'http://localhost:5000/api';
-
+  const serverUrl = 'https://mediaconnects.live/api';
   useEffect(() => {
     if (showOtpForm) {
       // Display toast message for 5 seconds
@@ -65,55 +76,55 @@ function Login({ setShowLogin }) {
     }
   }, [showOtpForm]);
 
-  let userToken;
-  const verifyToken = async () => {
-    try {
-      userToken = localStorage.getItem('token');
+  // const verifyToken = async () => {
+  //   try {
+  //     const userToken = localStorage.getItem('token');
 
-      const res = await fetch(`${serverUrl}/verify-token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userToken }),
-      });
-      if (res.ok) {
-        setIsLoggedIn(true);
-        setShowOtpForm(false);
-      } else {
-        const errorData = await res.json();
-        if (errorData.expired) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('email');
-          setIsLoggedIn(false);
-        }
-      }
-    } catch (error) {
-      console.error('Error verification in token:', error);
-    }
-  };
-  const autoVerifyToken = async () => {
-    try {
-      userToken = localStorage.getItem('token');
-      const res = await fetch(`${serverUrl}/autoverify-token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userToken }),
-      });
-      if (res.ok) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('email');
+  //     const res = await fetch(`${serverUrl}/verify-token`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         authorization: userToken,
+  //       },
+  //       body: JSON.stringify({ userToken }),
+  //     });
+  //     if (res.ok) {
+  //       setIsLoggedIn(true);
+  //       setShowOtpForm(false);
+  //     } else {
+  //       const errorData = await res.json();
+  //       if (errorData.expired) {
+  //         localStorage.removeItem('token');
+  //         localStorage.removeItem('email');
+  //         setIsLoggedIn(false);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error verification in token:', error);
+  //   }
+  // };
+  // const autoVerifyToken = async () => {
+  //   try {
+  //     userToken = localStorage.getItem('token');
+  //     const res = await fetch(`${serverUrl}/autoverify-token`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ userToken }),
+  //     });
+  //     if (res.ok) {
+  //       localStorage.removeItem('token');
+  //       localStorage.removeItem('email');
 
-        setIsLoggedIn(false);
-        setShowOtpForm(false);
-        setEmail('');
-      }
-    } catch (error) {
-      console.error('Error auto-verifying token:', error);
-    }
-  };
+  //       setIsLoggedIn(false);
+  //       setShowOtpForm(false);
+  //       setEmail('');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error auto-verifying token:', error);
+  //   }
+  // };
   useEffect(() => {
     // Use a timeout to hide the overlay after a certain time (e.g., 2 seconds)
     const timeoutId = setTimeout(() => {
@@ -123,34 +134,34 @@ function Login({ setShowLogin }) {
     return () => clearTimeout(timeoutId);
   }, []); // Run this effect only once when the component mounts
 
-  useEffect(() => {
-    verifyToken();
-    autoVerifyToken();
+  // useEffect(() => {
+  //   // verifyToken();
+  //   // autoVerifyToken();
 
-    let intervalId;
+  //   //let intervalId;
 
-    if (userToken && isLoggedIn) {
-      intervalId = setInterval(() => {
-        verifyToken();
-      }, 10000);
-    }
+  //   // if (userToken && isLoggedIn) {
+  //   //   intervalId = setInterval(() => {
+  //   //     verifyToken();
+  //   //   }, 10000);
+  //   // }
 
-    return () => clearInterval(intervalId);
-  }, [userToken, isLoggedIn]);
+  //   return () => clearInterval(intervalId);
+  // }, [userToken, isLoggedIn]);
 
-  useEffect(() => {
-    autoVerifyToken();
+  // useEffect(() => {
+  //   // autoVerifyToken();
 
-    let intervalId;
+  //   let intervalId;
 
-    if (userToken && isLoggedIn) {
-      intervalId = setInterval(() => {
-        autoVerifyToken();
-      }, 10000);
-    }
+  //   if (userToken && isLoggedIn) {
+  //     intervalId = setInterval(() => {
+  //       // autoVerifyToken();
+  //     }, 10000);
+  //   }
 
-    return () => clearInterval(intervalId);
-  }, [userToken, isLoggedIn]);
+  //   return () => clearInterval(intervalId);
+  // }, [userToken, isLoggedIn]);
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -161,13 +172,17 @@ function Login({ setShowLogin }) {
   const handleGetOtp = async () => {
     localStorage.setItem('email', email);
 
+    const userToken = localStorage.getItem('token');
+
     try {
-      const res = await fetch(`${serverUrl}/verify-login`, {
+      setIsLoading(true);
+      const res = await fetch(`${serverUrl}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          authorization: userToken,
         },
-        body: JSON.stringify({ email, otp }),
+        body: JSON.stringify({ email }),
       });
       if (res.ok) {
         setSuccessMsg('OTP sent successfully');
@@ -176,6 +191,7 @@ function Login({ setShowLogin }) {
       } else {
         const errorData = await res.json();
         setErrorMessage(errorData.message);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error sending OTP:', error);
@@ -185,21 +201,21 @@ function Login({ setShowLogin }) {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const userEmail = localStorage.getItem('email');
-
-    const res = await fetch(`${serverUrl}/login`, {
+    const res = await fetch(`${serverUrl}/verify-otp`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ userEmail, otp }),
+      body: JSON.stringify({ email, otp }),
     });
     if (res.ok) {
       const data = await res.json();
-      const tokenValue = data.token;
-      localStorage.setItem('token', tokenValue);
+      const { token, tokenExp } = data.data.data;
+      localStorage.setItem('token', token);
       localStorage.setItem('email', email);
+      localStorage.setItem('expiresAt', tokenExp);
       setIsLoggedIn(true);
+      setIsLoading(false);
     } else {
       const errorData = await res.json();
       console.log('my errors', errorData);
@@ -229,22 +245,15 @@ function Login({ setShowLogin }) {
     setDisableResend(true);
     startTimer(30);
 
-    const userEmail = localStorage.getItem('email');
-
     const res = await fetch(`${serverUrl}/resend-otp`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ userEmail, otp }),
+      body: JSON.stringify({ email }),
     });
     if (res.ok) {
       setSuccessMsg('OTP resent successfully');
-      setIsLoggedIn(true);
-      const data = await res.json();
-      const tokenValue = data.token;
-      localStorage.setItem('token', tokenValue);
-      localStorage.setItem('email', email);
       setDisableResend(true);
       setTimer(30);
       startTimer();
@@ -272,7 +281,7 @@ function Login({ setShowLogin }) {
     }, 8000);
   }
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       {showOverlay && (
         <div className="transparent-overlay">
           {/* <img src={loader} alt="Loading..." className="loading-gif" /> */}
@@ -296,9 +305,9 @@ function Login({ setShowLogin }) {
           </Routes>
         </>
       ) : (
-        <div>
+        <div style={{ height: '100%' }}>
           {showOtpForm ? (
-            <>
+            <div style={{ height: '100%' }}>
               <ToastContainer />
               <div className="logo">
                 <img src={companyLogo} alt="Logo" />
@@ -323,7 +332,6 @@ function Login({ setShowLogin }) {
                       role="button"
                       style={{
                         opacity: buttonOpacity,
-                        color: 'black',
                         pointerEvents: disableResend ? 'none' : 'auto',
                       }}
                       disabled={disableResend}
@@ -349,49 +357,61 @@ function Login({ setShowLogin }) {
                   <div style={{ color: 'red' }}>{errorMessage}</div>
                 )}
               </div>
-            </>
+            </div>
           ) : (
             <>
               <div className="logo">
                 <img src={companyLogo} alt="Logo" />
               </div>
-              <div className="login_container">
-                <div className="heading">Login</div>
-                {/* <button className="google-button" type="button">
-                  Continue with Google
-                </button>
-                <span className="or">or</span> */}
-                <div className="email_label">
-                  <input
-                    className="input_label_email"
-                    type="email"
-                    placeholder="email"
-                    id="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                  />
+              <div className="container-login-content">
+                <div className="info-container">
+                  <div className="heading-text">
+                    <span>Transform Blogs into Brilliance: Your Inspiration, Our Creation!</span>
+                    {/* <span>Transforming Inspiration into Impactful Content</span> */}
+                  </div>
                 </div>
-                <button
-                  className="get_otp"
-                  onClick={handleGetOtp}
-                  type="button"
-                >
-                  Get Otp
-                </button>
+                <div className="login_container">
+                  <div className="heading">Login</div>
+                  {/* <button className="google-button" type="button">
+                    Continue with Google
+                  </button>
+                  <span className="or">or</span> */}
+                  <div className="email_label">
+                    <input
+                      disabled={isLoading}
+                      className="input_label_email_login"
+                      type="email"
+                      placeholder="email"
+                      id="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                    />
+                  </div>
+                  <button
+                    disabled={isLoading}
+                    className="get_otp_login"
+                    onClick={handleGetOtp}
+                    type="button"
+                  >
+                    { isLoading ? (
+                      <img src={loaderIcon} alt="loader" height="20" width="20" />)
+                      : 'Get Otp'}
+                  </button>
 
-                {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
-                {successMsg && (
-                  <div style={{ color: 'green' }}>{successMsg}</div>
-                )}
-                {errorMessage && (
-                  <div style={{ color: 'red' }}>{errorMessage}</div>
-                )}
+                  {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
+                  {successMsg && (
+                    <div style={{ color: 'green' }}>{successMsg}</div>
+                  )}
+                  {errorMessage && (
+                    <div style={{ color: 'red' }}>{errorMessage}</div>
+                  )}
 
-                <div className="noaccount_container">
-                  <div>
-                    <span className="noaccount_text">
-                      Don&apos;t have an account?
-                    </span>
+                  <div className="noaccount_container">
+                    <div>
+                      <span className="noaccount_text">
+                        Don&apos;t have an account?
+                      </span>
+                    </div>
                   </div>
                   <div className="register_here">
                     <span

@@ -6,10 +6,13 @@ import Register from '../Register/Register';
 
 import Login from '../Login/Login';
 
+import './container.css';
+
 function Container() {
   const [showLogin, setShowLogin] = useState(true);
   return (
-    <div>
+    <div className="container">
+      <div className="background-image" />
       {showLogin ? (
         <Login setShowLogin={setShowLogin} />
       ) : (

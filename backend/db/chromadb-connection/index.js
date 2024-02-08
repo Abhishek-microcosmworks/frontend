@@ -7,9 +7,10 @@ const embedder = new OpenAIEmbeddingFunction({
 });
 
 export async function connectDb(){
+
   try {
     const collection = await client.getCollection({
-      name: "test_vectorDb",
+      name: "personalised_vectorDb",
       embeddingFunction: embedder,
     })
   //   const collection = await client.createCollection({

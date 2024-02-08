@@ -35,7 +35,6 @@ function Popup({
   const showHideClassName = show ? 'popup display-block' : 'popup display-none';
 
   const serverUrl = 'https://mediaconnects.live/api';
-
   async function getImages() {
     const res = await axios.post(`${serverUrl}/blog/getImages`, {
       email: localStorage.getItem('email'),

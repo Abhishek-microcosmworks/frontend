@@ -12,6 +12,8 @@
   "author": "KG",
   "license": "ISC",
   "dependencies": {
+    "@langchain/openai": "^0.0.13",
+    "@pinecone-database/pinecone": "^2.0.1",
     "aws-sdk": "^2.1513.0",
     "axios": "^1.5.1",
     "babel-cli": "^6.26.0",
@@ -33,6 +35,7 @@
     "react-dotenv": "^0.1.3",
     "rimraf": "^5.0.5",
     "router": "^1.3.8",
+    "sbd": "^1.0.19",
     "uuid": "^8.0.0"
   }
 }

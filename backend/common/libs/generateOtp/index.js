@@ -1,3 +1,1 @@
-import { generateOtp , otpExpirationTime} from './generateOtp.js';
-
-export { generateOtp, otpExpirationTime };
+export { generateOtp , otpExpirationTime} from './generateOtp.js';

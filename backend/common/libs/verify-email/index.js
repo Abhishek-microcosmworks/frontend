@@ -1,0 +1,1 @@
+export { verifyEmail } from './verify-email.js';
