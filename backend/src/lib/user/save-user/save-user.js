@@ -2,7 +2,7 @@ import { RegisterData } from '../../../../db/model/index.js';
 
 export async function saveUser(name, email) {
 
-  console.log(email, name)
+  console.log('email========',email, name)
 
     try {
       const data = {

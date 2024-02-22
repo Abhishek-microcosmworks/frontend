@@ -1,13 +1,14 @@
 import { RegisterData } from '../../../db/model/index.js';
 
-export const verifyEmail = async (email) => {
+export const verifyEmail = async (email, name) => {
+
    try {
-      const userEmail = await RegisterData.findOne({ email });
+      const userEmail = await RegisterData.findOne({ email, name });
 
       if (userEmail === null) {
-         return { error: true, message: 'Email not found' };
+         return { error: true, message: 'Email or Name is incorrect!' };
       } else {
-         return { error: false, message: userEmail };
+         return { error: false, data: userEmail, message: 'Email already exist!' };
       }
    } catch (error) {
       console.error('Error:', error);

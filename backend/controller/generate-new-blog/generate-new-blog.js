@@ -22,11 +22,13 @@ export const generateBlog = async (req, res) => {
 
   const requestId = req.body.requestId;
 
+  console.log('id=========',requestId)
+
   const blog_array = urls.split(',')
 
   const blog_data = await getBlogData(blog_array, email, requestId)
 
-  await generateContext(blog_data);
+  //await generateContext(blog_data);
 
   if(blog_data.error === true){
     res.status(500).json({ message: 'Error in extracting the data from the url.' })
@@ -39,7 +41,7 @@ export const generateBlog = async (req, res) => {
 
   const vectorDimensions = 1536;
 
-  const indexName = 'test-index';
+  const indexName = 'blog-index';
 
   //create index in pinecone
   const indexCreated = await createPineconeIndex(client, indexName, vectorDimensions)
@@ -49,14 +51,13 @@ export const generateBlog = async (req, res) => {
     return
   }
 
-  const blogSections = await generateSections(blog_data)
+  const blogsContent = await generateSections(blog_data.data, email, requestId);
 
-  if(blogSections.error === true){
-    res.status(500).json({ message: blogSections.message })
-    return
-  }
+      if(blogsContent.error === true){
+        return { error: true, message: blogsContent.message }
+      }
 
-  const updatedIndex = await updatePinecone(client, indexName, blogSections.data, email, requestId)
+  const updatedIndex = await updatePinecone(client, indexName, blogsContent.sectionsContent, email, requestId)
 
   if(updatedIndex.error === true){
     res.status(500).json({ message: updatedIndex.message })
@@ -65,51 +66,52 @@ export const generateBlog = async (req, res) => {
 
   const introductionQuery = 'Introduction';
   
-  const introductionQueryEmbedding = await generateEmbeddings(introductionQuery)
+  const embeddings = await generateEmbeddings(blogsContent.data, indexName, email, requestId)
 
-  if(introductionQueryEmbedding.error === true){
-    res.status(500).json({ message: introductionQueryEmbedding.message })
+  if(embeddings.error === true){
+    res.status(500).json({ message: embeddings.message })
     return
   }
 
-  const introductionSearchedData = await searchQuery(introductionQueryEmbedding.data, indexName, requestId);
+  const searchedData = await searchQuery(embeddings.data, indexName, requestId);
 
-  if(introductionSearchedData.error === true){
-    res.status(500).json({ message: introductionSearchedData.message })
+  if(searchedData.error === true){
+    res.status(500).json({ message: searchedData.message })
     return
   }
 
-  const newIntroduction = await generateIntroduction(introductionSearchedData.data);
+  // const newIntroduction = await generateIntroduction(introductionSearchedData.data);
 
-  if(newIntroduction.error === true){
-    res.status(500).json({ message: newIntroduction.message })
-    return
-  }
+  // if(newIntroduction.error === true){
+  //   res.status(500).json({ message: newIntroduction.message })
+  //   return
+  // }
 
-  const conclusionQuery = 'Conclusion';
+  // const conclusionQuery = 'Conclusion';
 
-  const conclusionQueryEmbedding = await generateEmbeddings(conclusionQuery)
+  // const conclusionQueryEmbedding = await generateEmbeddings(conclusionQuery)
 
-  if(conclusionQueryEmbedding.error === true){
-    res.status(500).json({ message: introductionQueryEmbedding.message })
-    return
-  }
+  // if(conclusionQueryEmbedding.error === true){
+  //   res.status(500).json({ message: introductionQueryEmbedding.message })
+  //   return
+  // }
 
-  const conclusionSearchedData = await searchQuery(conclusionQueryEmbedding.data, indexName);
+  // const conclusionSearchedData = await searchQuery(conclusionQueryEmbedding.data, indexName);
 
-  if(conclusionSearchedData.error === true){
-    res.status(500).json({ message: introductionSearchedData.message })
-    return
-  }
+  // if(conclusionSearchedData.error === true){
+  //   res.status(500).json({ message: introductionSearchedData.message })
+  //   return
+  // }
 
-  const newConclusion = await generateConclusion(conclusionSearchedData.data);
+  // const newConclusion = await generateConclusion(conclusionSearchedData.data);
 
-  if(newConclusion.error === true){
-    res.status(500).json({ message: newConclusion.message })
-    return
-  }
+  // if(newConclusion.error === true){
+  //   res.status(500).json({ message: newConclusion.message })
+  //   return
+  // }
   
-  const newBlog = await generateNewBlog(newIntroduction.data, newConclusion.data)
+  // const newBlog = await generateNewBlog(newIntroduction.data, newConclusion.data)
+  const newBlog = await generateNewBlog(searchedData.data)
 
   if(newBlog.error === true){
     res.status(500).json({ message: newBlog.message })
@@ -123,5 +125,6 @@ export const generateBlog = async (req, res) => {
     return
   }
 
+   console.log('Blog is created.')
    res.status(200).json({ data: generatedBlog.data })
 }

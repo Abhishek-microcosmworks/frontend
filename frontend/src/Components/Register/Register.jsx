@@ -1,35 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
+
 import { Route, Routes } from 'react-router-dom';
+
+import { ToastContainer, toast } from 'react-toastify';
+
+import axios from 'axios';
 
 import Articles from '../Articles/Articles';
 
+import History from '../History/History';
+
 import Header from '../Header/Header';
 
-import History from '../History/History';
+import companyLogo from '../../assets/images/media-connects-final.png';
+
+import loaderIcon from '../../assets/images/loader.gif';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import './Register.css';
 
-import companyLogo from '../../assets/images/Company_Logo.png';
-
 function Register({ setShowLogin }) {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginError, setLoginError] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [showOtpForm, setShowOtpForm] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
   const [timer, setTimer] = useState(30);
-  const [disableResend, setDisableResend] = useState(false);
-  const [incorrectAttempts, setIncorrectAttempts] = useState(0);
-  const [otpExpired, setOtpExpired] = useState(false);
+  const [disableResend, setDisableResend] = useState(true);
+  const [buttonOpacity, setButtonOpacity] = useState(1);
 
-  const serverUrl = 'https://mediaconnects.live/api';
+  useEffect(() => {
+    const authToken = localStorage.getItem('token');
+    const expireTime = localStorage.getItem('expiresAt');
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    if (authToken !== null && expireTime > currentTimestamp) {
+      setIsLoggedIn(true);
+      setIsLoading(false);
+    }
+  });
 
   const startTimer = () => {
     let count = 30;
+    setDisableResend(true);
     const timerId = setInterval(() => {
       count -= 1;
       setTimer(count);
@@ -41,177 +60,180 @@ function Register({ setShowLogin }) {
     }, 1000);
   };
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
+  const serverUrl = 'https://mediaconnects.live/api';
+  useEffect(() => {
+    if (showOtpForm) {
+      startTimer();
+      // Display toast message for 5 seconds
+      toast.success('Otp has been send to your Email', {
+        autoClose: 5000,
+        style: {
+          fontFamily: 'Noto Sans',
+          fontSize: '15px',
+          fontWeight: '600',
+          borderRadius: '14px',
+        },
+      });
+    }
+  }, [showOtpForm]);
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
   };
 
-  const handleRegister = async () => {
+  const handleGetOtp = async () => {
+    if (!email || !name) {
+      setErrorMessage('Please enter your credentials!');
+      return;
+    }
+    setIsLoading(true);
+    localStorage.setItem('email', email);
+    localStorage.setItem('name', name);
     try {
-      const res = await fetch(`${serverUrl}/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      await axios.post(
+        `${serverUrl}/register`,
+        {
+          email,
+          name,
         },
-        body: JSON.stringify({ email, name }),
-      });
-
-      console.log(res);
-
-      if (res.ok) {
-        setSuccessMsg('OTP sent successfully');
-        setShowOtpForm(true);
-        localStorage.setItem('email', email);
-      } else {
-        const errorData = await res.json();
-        setErrorMessage(errorData.error);
-      }
+      );
+      setShowOtpForm(true);
+      setDisableResend(false);
     } catch (error) {
-      console.error('Error sending OTP:', error);
+      setErrorMessage(error.response.data.error);
+      setIsLoading(false);
     }
   };
 
-  const handleGetOtp = async (e) => {
+  const handleLogin = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
-    console.log(e.target);
-
-    const res = await fetch(`${serverUrl}/verify-otp`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({ email, otp }),
-    });
-    console.log('register details, ', res);
-    if (res.ok) {
-      setSuccessMsg('User Registered Successfully');
+    try {
+      const res = await axios.post(`${serverUrl}/verify-otp`, {
+        email,
+        name,
+        otp,
+      });
+      const { token, tokenExp } = res.data.data.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('email', email);
+      localStorage.setItem('expiresAt', tokenExp);
       setIsLoggedIn(true);
-      const data = await res.json();
-      const tokenValue = data.token;
-      localStorage.setItem('token', tokenValue);
-    } else {
-      const errorData = await res.json();
-      console.log('my errors', errorData);
-      if (errorData.error === 'please fill otp') {
-        setErrorMessage('Please fill OTP ');
-      } else if (errorData.error === 'Incorrect OTP') {
-        setErrorMessage('Invalid otp. Please check your OTP');
-        setIncorrectAttempts((prevAttempts) => prevAttempts + 1);
-        if (incorrectAttempts >= 3) {
-          setErrorMessage('Invalid otp. Please check your OTP');
-          setDisableResend(false); // Enable the resend button
-          startTimer();
-        }
-      } else if (errorData.error === 'OTP expired') {
-        setErrorMessage('please regenerate otp');
-        setOtpExpired(true);
-        setDisableResend(false); // Enable the resend button
-        startTimer();
-      } else {
-        setErrorMessage('An error occurred during login');
-      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      const errorData = error.response.data;
+      setLoginError(errorData.message);
     }
   };
   const handleResendOtp = async (e) => {
     e.preventDefault();
-    console.log('my typing otp is/', otp);
-    const userEmail = localStorage.getItem('email');
-
-    const res = await fetch(`${serverUrl}/resend-otp`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({ userEmail, otp }),
-    });
-    console.log('resend otp', res);
-    if (res.ok) {
-      setSuccessMsg('OTP resent successfully');
-      setIsLoggedIn(true);
-      const data = await res.json();
-      const tokenValue = data.token;
-      console.log('resend otp', data);
-      localStorage.setItem('token', tokenValue);
-      localStorage.setItem('email', email);
-      // localStorage.removeItem('otpEntered');
+    setDisableResend(true);
+    startTimer(30);
+    setTimer(30);
+    try {
+      const res = await axios.post(`${serverUrl}/resend-otp`, {
+        email, name,
+      });
+      // console.log('res in resend', res);
+      setSuccessMsg(res.data.message);
       setDisableResend(true);
-      setTimer(30);
-      startTimer();
-    } else {
-      const data = await res.json();
-      console.log('else resend otp', data);
+    } catch (error) {
+      console.error('Error occurred while resending OTP:', error);
+      // Handle error here
     }
   };
+  useEffect(() => {
+    setButtonOpacity(disableResend ? 0.5 : 1);
+  }, [disableResend]);
 
-  const handleLogin = () => {
+  const handleRegister = () => {
     setShowLogin(true);
   };
-
-  if (successMsg || errorMessage) {
+  if (loginError || errorMessage) {
+    setTimeout(() => {
+      setLoginError('');
+      setErrorMessage('');
+    }, 5000);
+  }
+  if (successMsg) {
     setTimeout(() => {
       setSuccessMsg('');
-      setErrorMessage('');
-    }, 3000);
+    }, 8000);
   }
-
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       {isLoggedIn ? (
         <>
           <Header
             setIsLoggedIn={setIsLoggedIn}
             setShowOtpForm={setShowOtpForm}
             isLoggedIn={isLoggedIn}
+            showOtpForm={showOtpForm}
             setShowLogin={setShowLogin}
+            setEmail={setEmail}
+            setName={setName}
           />
+          {/* <Articles /> */}
           <Routes>
             <Route path="/" element={<Articles />} />
             <Route path="/history" element={<History />} />
           </Routes>
         </>
       ) : (
-        <div>
+        <div style={{ height: '100%' }}>
           {showOtpForm ? (
-            <>
+            <div style={{ height: '100%' }}>
+              <ToastContainer />
               <div className="logo">
                 <img src={companyLogo} alt="Logo" />
               </div>
               <div className="otp-container">
-                <h2>Enter OTP</h2>
-                <p>We have sent a 6-digit OTP in your email.</p>
-                <div>
+                <span className="otp-heading">Please enter your 4 digit code</span>
+                <p className="otp-text">Check your email</p>
+                <div className="otp-input-container">
                   <input
                     type="text"
                     className="otp-input"
                     maxLength="6"
-                    name="otp"
                     onChange={handleOtpChange}
-                    value={otp}
                   />
                 </div>
-                {(otpExpired || incorrectAttempts >= 3) && (
-                  <button
-                    className="resend-otp-btn"
-                    onClick={handleResendOtp}
-                    type="button"
-                    disabled={disableResend}
-                  >
-                    Resend OTP
-                    {disableResend ? `(${timer}s)` : ''}
-                  </button>
+                {(showOtpForm) && (
+                  <div className="resend-otp-btn">
+                    <span
+                      onClick={handleResendOtp}
+                      onKeyDown={(e) => e.keyCode === 13 && handleResendOtp()}
+                      tabIndex={0}
+                      role="button"
+                      style={{
+                        opacity: buttonOpacity,
+                        pointerEvents: disableResend ? 'none' : 'auto',
+                      }}
+                      disabled={disableResend}
+                    >
+                      Resend Code
+                      {disableResend ? ` in (${timer}s)` : ''}
+                    </span>
+                  </div>
                 )}
+
                 <button
-                  className="btn_register "
-                  onClick={handleGetOtp}
+                  className="submit-btn"
+                  onClick={handleLogin}
                   type="button"
                 >
-                  Get Otp
+                  Submit
                 </button>
+                {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
                 {successMsg && (
                   <div style={{ color: 'green' }}>{successMsg}</div>
                 )}
@@ -219,60 +241,77 @@ function Register({ setShowLogin }) {
                   <div style={{ color: 'red' }}>{errorMessage}</div>
                 )}
               </div>
-            </>
+            </div>
           ) : (
             <>
               <div className="logo">
                 <img src={companyLogo} alt="Logo" />
               </div>
-              <div className="register_container">
-                <div className="heading">Register</div>
-                <div className="email_label_reg">
-                  <input
-                    className="input_label_email"
-                    type="email"
-                    placeholder="email"
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={handleEmailChange}
-                  />
+              <div className="container-login-content">
+                <div className="info-container">
+                  <div className="heading-text">
+                    <span>Transform Blogs into Brilliance: Your Inspiration, Our Creation!</span>
+                    {/* <span>Transforming Inspiration into Impactful Content</span> */}
+                  </div>
                 </div>
-                <div className="name_label">
-                  <input
-                    className="input_label_name"
-                    type="name"
-                    name="name"
-                    placeholder="name"
-                    id="name"
-                    value={name}
-                    onChange={handleNameChange}
-                  />
-                </div>
-                <button
-                  className="get_otp"
-                  onClick={handleRegister}
-                  type="button"
-                >
-                  Register
-                </button>
+                <div className="login_container">
+                  <div className="heading">Welcome To the Media Connects</div>
+                  {/* <button className="google-button" type="button">
+                    Continue with Google
+                  </button>
+                  <span className="or">or</span> */}
+                  <div className="email_label">
+                    <input
+                      disabled={isLoading}
+                      className="input_label_email_login"
+                      type="email"
+                      placeholder="email"
+                      id="email"
+                      value={email}
+                      onChange={handleEmailChange}
+                    />
+                  </div>
+                  <div className="name_label_login">
+                    <input
+                      className="input_label_name_login"
+                      type="name"
+                      name="name"
+                      placeholder="name"
+                      id="name"
+                      value={name}
+                      onChange={handleNameChange}
+                    />
+                  </div>
+                  <button
+                    disabled={isLoading}
+                    className="get_otp_login"
+                    onClick={handleGetOtp}
+                    type="button"
+                  >
+                    { isLoading ? (
+                      <img src={loaderIcon} alt="loader" height="20" width="20" />)
+                      : 'Register'}
+                  </button>
 
-                {successMsg && (
-                  <div className="successs-msg">{successMsg}</div>
-                )}
-                {errorMessage && (
-                  <div className="fail-msg">{errorMessage}</div>
-                )}
-                <div className="noaccount_container">
-                  <div>
-                    <span className="noaccount_text">
-                      Already have an account?
-                    </span>
+                  {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
+                  {successMsg && (
+                    <div style={{ color: 'green' }}>{successMsg}</div>
+                  )}
+                  {errorMessage && (
+                    <div style={{ color: 'red' }}>{errorMessage}</div>
+                  )}
+
+                  <div className="noaccount_container">
+                    <div>
+                      <span className="noaccount_text">
+                        Already have an account?
+                      </span>
+                    </div>
                   </div>
                   <div className="register_here">
                     <span
-                      onClick={handleLogin}
-                      onKeyDown={(e) => e.keyCode === 13 && handleLogin()}
+                      onClick={handleRegister}
+                      onKeyDown={(e) => e.keyCode === 13 && handleRegister()}
                       tabIndex={0}
                       role="button"
                     >
@@ -290,8 +329,6 @@ function Register({ setShowLogin }) {
 }
 Register.propTypes = {
   setShowLogin: PropTypes.func.isRequired,
-  // setIsLoggedIn: PropTypes.func.isRequired,
-  // setShowOtpForm: PropTypes.func.isRequired,
-  // showOtpForm: PropTypes.bool.isRequired,
 };
+
 export default Register;

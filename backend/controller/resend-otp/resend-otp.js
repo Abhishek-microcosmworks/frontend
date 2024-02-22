@@ -9,9 +9,9 @@ import {
 
 export const resendOtp = async (req, res) => {
     try {
-        const { email } = req.body;
+        const { email, name } = req.body;
         
-        const emailConfirmation = await verifyEmail(email);
+        const emailConfirmation = await verifyEmail(email, name);
         
         if(emailConfirmation.error === true){
           return res.status(404).json({ message: emailConfirmation.message });

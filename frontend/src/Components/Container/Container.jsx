@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Footer from '../Footer/Footer';
 
@@ -10,6 +10,21 @@ import './container.css';
 
 function Container() {
   const [showLogin, setShowLogin] = useState(true);
+  const [checkingToken, setCheckingToken] = useState(true);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setShowLogin(true);
+    } else {
+      setShowLogin(true);
+    }
+    setCheckingToken(false);
+  }, []);
+
+  if (checkingToken) {
+    return <div className="container" />;
+  }
+
   return (
     <div className="container">
       <div className="background-image" />

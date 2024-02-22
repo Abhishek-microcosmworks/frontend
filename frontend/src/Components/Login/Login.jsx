@@ -6,6 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 
 import { ToastContainer, toast } from 'react-toastify';
 
+import axios from 'axios';
+
 import Articles from '../Articles/Articles';
 
 import History from '../History/History';
@@ -22,6 +24,7 @@ import './Login.css';
 
 function Login({ setShowLogin }) {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,12 +32,9 @@ function Login({ setShowLogin }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [showOtpForm, setShowOtpForm] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(true);
   const [timer, setTimer] = useState(30);
   const [disableResend, setDisableResend] = useState(true);
-  const [incorrectAttempts, setIncorrectAttempts] = useState(0);
   const [buttonOpacity, setButtonOpacity] = useState(1);
-  const [otpExpired, setOtpExpired] = useState(false);
 
   useEffect(() => {
     const authToken = localStorage.getItem('token');
@@ -63,6 +63,7 @@ function Login({ setShowLogin }) {
   const serverUrl = 'https://mediaconnects.live/api';
   useEffect(() => {
     if (showOtpForm) {
+      startTimer();
       // Display toast message for 5 seconds
       toast.success('Otp has been send to your Email', {
         autoClose: 5000,
@@ -76,190 +77,79 @@ function Login({ setShowLogin }) {
     }
   }, [showOtpForm]);
 
-  // const verifyToken = async () => {
-  //   try {
-  //     const userToken = localStorage.getItem('token');
-
-  //     const res = await fetch(`${serverUrl}/verify-token`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         authorization: userToken,
-  //       },
-  //       body: JSON.stringify({ userToken }),
-  //     });
-  //     if (res.ok) {
-  //       setIsLoggedIn(true);
-  //       setShowOtpForm(false);
-  //     } else {
-  //       const errorData = await res.json();
-  //       if (errorData.expired) {
-  //         localStorage.removeItem('token');
-  //         localStorage.removeItem('email');
-  //         setIsLoggedIn(false);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('Error verification in token:', error);
-  //   }
-  // };
-  // const autoVerifyToken = async () => {
-  //   try {
-  //     userToken = localStorage.getItem('token');
-  //     const res = await fetch(`${serverUrl}/autoverify-token`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ userToken }),
-  //     });
-  //     if (res.ok) {
-  //       localStorage.removeItem('token');
-  //       localStorage.removeItem('email');
-
-  //       setIsLoggedIn(false);
-  //       setShowOtpForm(false);
-  //       setEmail('');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error auto-verifying token:', error);
-  //   }
-  // };
-  useEffect(() => {
-    // Use a timeout to hide the overlay after a certain time (e.g., 2 seconds)
-    const timeoutId = setTimeout(() => {
-      setShowOverlay(false);
-    }, 200);
-
-    return () => clearTimeout(timeoutId);
-  }, []); // Run this effect only once when the component mounts
-
-  // useEffect(() => {
-  //   // verifyToken();
-  //   // autoVerifyToken();
-
-  //   //let intervalId;
-
-  //   // if (userToken && isLoggedIn) {
-  //   //   intervalId = setInterval(() => {
-  //   //     verifyToken();
-  //   //   }, 10000);
-  //   // }
-
-  //   return () => clearInterval(intervalId);
-  // }, [userToken, isLoggedIn]);
-
-  // useEffect(() => {
-  //   // autoVerifyToken();
-
-  //   let intervalId;
-
-  //   if (userToken && isLoggedIn) {
-  //     intervalId = setInterval(() => {
-  //       // autoVerifyToken();
-  //     }, 10000);
-  //   }
-
-  //   return () => clearInterval(intervalId);
-  // }, [userToken, isLoggedIn]);
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
   };
 
   const handleGetOtp = async () => {
+    if (!email || !name) {
+      setErrorMessage('Please enter your credentials!');
+      return;
+    }
+    setIsLoading(true);
     localStorage.setItem('email', email);
-
-    const userToken = localStorage.getItem('token');
-
+    localStorage.setItem('name', name);
+    // const userToken = localStorage.getItem('token');
     try {
-      setIsLoading(true);
-      const res = await fetch(`${serverUrl}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: userToken,
+      await axios.post(
+        `${serverUrl}/login`,
+        {
+          email,
+          name,
         },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        setSuccessMsg('OTP sent successfully');
-        setShowOtpForm(true);
-        setDisableResend(false);
-      } else {
-        const errorData = await res.json();
-        setErrorMessage(errorData.message);
-        setIsLoading(false);
-      }
+      );
+      setShowOtpForm(true);
+      setDisableResend(false);
     } catch (error) {
-      console.error('Error sending OTP:', error);
+      setErrorMessage(error.response.data.message);
+      setIsLoading(false);
     }
   };
 
   const handleLogin = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
-
-    const res = await fetch(`${serverUrl}/verify-otp`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({ email, otp }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const { token, tokenExp } = data.data.data;
+    try {
+      const res = await axios.post(`${serverUrl}/verify-otp`, {
+        email,
+        name,
+        otp,
+      });
+      const { token, tokenExp } = res.data.data.data;
       localStorage.setItem('token', token);
       localStorage.setItem('email', email);
       localStorage.setItem('expiresAt', tokenExp);
       setIsLoggedIn(true);
       setIsLoading(false);
-    } else {
-      const errorData = await res.json();
-      console.log('my errors', errorData);
-      if (errorData.message === 'please fill otp') {
-        setLoginError('Please fill OTP ');
-      } else if (errorData.message === 'Incorrect OTP') {
-        setLoginError('Invalid otp. Please check your OTP');
-        setIncorrectAttempts((prevAttempts) => prevAttempts + 1);
-        if (incorrectAttempts >= 3) {
-          setLoginError('Invalid otp. Please check your OTP');
-          setDisableResend(false);
-          startTimer();
-        }
-      } else if (errorData.message === 'OTP expired') {
-        setLoginError('Otp expired!! Please resend otp');
-        setOtpExpired(true);
-        setDisableResend(false);
-        startTimer();
-      } else {
-        setLoginError('An error occurred during login');
-      }
+    } catch (error) {
+      console.log(error);
+      const errorData = error.response.data;
+      setLoginError(errorData.message);
     }
   };
   const handleResendOtp = async (e) => {
     e.preventDefault();
-    setSuccessMsg('otp resent successfully');
     setDisableResend(true);
     startTimer(30);
-
-    const res = await fetch(`${serverUrl}/resend-otp`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-    if (res.ok) {
-      setSuccessMsg('OTP resent successfully');
+    setTimer(30);
+    try {
+      const res = await axios.post(`${serverUrl}/resend-otp`, {
+        email, name,
+      });
+      // console.log('res in resend', res);
+      setSuccessMsg(res.data.message);
       setDisableResend(true);
-      setTimer(30);
-      startTimer();
-    } else {
-      const data = await res.json();
-      console.log('else resend otp', data);
+    } catch (error) {
+      console.error('Error occurred while resending OTP:', error);
+      // Handle error here
     }
   };
   useEffect(() => {
@@ -282,12 +172,6 @@ function Login({ setShowLogin }) {
   }
   return (
     <div style={{ height: '100%' }}>
-      {showOverlay && (
-        <div className="transparent-overlay">
-          {/* <img src={loader} alt="Loading..." className="loading-gif" /> */}
-        </div>
-      )}
-
       {isLoggedIn ? (
         <>
           <Header
@@ -297,6 +181,7 @@ function Login({ setShowLogin }) {
             showOtpForm={showOtpForm}
             setShowLogin={setShowLogin}
             setEmail={setEmail}
+            setName={setName}
           />
           {/* <Articles /> */}
           <Routes>
@@ -313,9 +198,9 @@ function Login({ setShowLogin }) {
                 <img src={companyLogo} alt="Logo" />
               </div>
               <div className="otp-container">
-                <h2>Enter OTP</h2>
-                <p>We have sent a 6-digit OTP in your email.</p>
-                <div>
+                <span className="otp-heading">Please enter your 4 digit code</span>
+                <p className="otp-text">Check your email</p>
+                <div className="otp-input-container">
                   <input
                     type="text"
                     className="otp-input"
@@ -323,7 +208,7 @@ function Login({ setShowLogin }) {
                     onChange={handleOtpChange}
                   />
                 </div>
-                {(showOtpForm || otpExpired || incorrectAttempts >= 3) && (
+                {(showOtpForm) && (
                   <div className="resend-otp-btn">
                     <span
                       onClick={handleResendOtp}
@@ -336,8 +221,8 @@ function Login({ setShowLogin }) {
                       }}
                       disabled={disableResend}
                     >
-                      Resend OTP
-                      {disableResend ? `(${timer}s)` : ''}
+                      Resend Code
+                      {disableResend ? ` in (${timer}s)` : ''}
                     </span>
                   </div>
                 )}
@@ -371,7 +256,7 @@ function Login({ setShowLogin }) {
                   </div>
                 </div>
                 <div className="login_container">
-                  <div className="heading">Login</div>
+                  <div className="heading">Welcome To the Media Connects</div>
                   {/* <button className="google-button" type="button">
                     Continue with Google
                   </button>
@@ -385,6 +270,17 @@ function Login({ setShowLogin }) {
                       id="email"
                       value={email}
                       onChange={handleEmailChange}
+                    />
+                  </div>
+                  <div className="name_label_login">
+                    <input
+                      className="input_label_name_login"
+                      type="name"
+                      name="name"
+                      placeholder="name"
+                      id="name"
+                      value={name}
+                      onChange={handleNameChange}
                     />
                   </div>
                   <button

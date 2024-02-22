@@ -1,0 +1,1 @@
+export { extractSectionNames } from './extract-sections-name.js';

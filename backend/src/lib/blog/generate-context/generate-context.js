@@ -2,6 +2,8 @@ import OpenAI from 'openai';
 
 export async function generateContext(content){
 
+  console.log('content======', content)
+
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY
     });

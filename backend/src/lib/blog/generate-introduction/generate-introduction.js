@@ -3,7 +3,7 @@ import OpenAI from 'openai'
 export async function generateIntroduction(content) {
     const openai = new OpenAI();
   
-    //console.log('content====', content)
+    console.log('content====', content)
   
     try {
   

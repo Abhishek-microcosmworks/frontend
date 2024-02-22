@@ -1,12 +1,14 @@
 import { blogsContent } from '../../../../db/model/index.js';
 
-export async function saveBlogsContent(email, requestId, content){
+export async function saveBlogsContent(email, url, requestId, content, sections){
 
     try {
         const blog_content_data = await blogsContent.create({
             email: email,
+            blogUrl: url,
             requestId: requestId,
-            blogContent: content.join('\n') 
+            blogContent: content,
+            sections: sections
         })
 
         return { error: false, data: blog_content_data };

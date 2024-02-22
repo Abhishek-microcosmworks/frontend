@@ -1,30 +1,35 @@
 import { Pinecone } from '@pinecone-database/pinecone';
 
-export async function searchQuery(queryEmbedding, indexName, requestId) {
+export async function searchQuery(embeddings, indexName, requestId) {
 
   try {
 
-    const client = new Pinecone({
-      apiKey: `${process.env.PINECONE_API_KEY}`
-    });
+    let concatenatedPageContent;
 
-    //const introVector = await embedText(query);
-    const pinecoe_index = client.index(indexName);
+    for (const embedding of embeddings) {
 
-    // Search for nearest neighbors in Pinecone
-    const searchResult = await pinecoe_index.query({
-      vector: queryEmbedding,
-      filter: {
-        "requestId": { "$eq": requestId }
-      },
-      topK: 5,
-      includeValues: true,
-      includeMetadata: true
-    });
+      const client = new Pinecone({
+        apiKey: `${process.env.PINECONE_API_KEY}`
+      });
 
-    // Extract pageContent from each match and concatenate them into a single string
-    const pageContents = searchResult.matches.map(match => match.metadata.pageContent);
-    const concatenatedPageContent = pageContents.join('\n');
+      //const introVector = await embedText(query);
+      const pinecoe_index = client.index(indexName);
+
+      // Search for nearest neighbors in Pinecone
+      const searchResult = await pinecoe_index.query({
+        vector: embedding,
+        //  filter:{
+        //    "requestId": {"$eq": requestId}
+        //  },
+        topK: 5,
+        includeValues: true,
+        includeMetadata: true
+      });
+
+      // Extract pageContent from each match and concatenate them into a single string
+      const pageContents = searchResult.matches.map(match => match.metadata.pageContent);
+      concatenatedPageContent = pageContents.join('\n');
+    }
 
     return { error: false, data: concatenatedPageContent };
   } catch (error) {

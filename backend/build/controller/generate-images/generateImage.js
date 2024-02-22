@@ -1,4 +1,3 @@
-import axios from 'axios';
 import OpenAI from 'openai';
 import { uploadImage } from '../../src/lib/aws/upload-image/index.js';
 import { image_db } from '../../db/model/index.js';
@@ -6,7 +5,9 @@ import { RegisterData } from '../../db/model/index.js';
 
 export const generateImage = async (req, res) => {
 
-    const openai = new OpenAI();
+    const openai = new OpenAI({
+        apiKey: `${process.env.OPENAI_API_KEY}`
+    });
     try {
         const response = await openai.images.generate({
             model: 'dall-e-3',

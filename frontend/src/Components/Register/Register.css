@@ -65,8 +65,13 @@
      outline: none;
      margin-top: 12%;
      font-family:"Noto Sans"
- 
  }
+
+ .logo{
+    height: 100%;
+    max-height: 70px;
+    background-color: #ffffff;
+  }
 
 .input_label_email::placeholder {
     color: #999; 

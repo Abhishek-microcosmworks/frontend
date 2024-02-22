@@ -2,16 +2,16 @@ import { OpenAIEmbeddings } from '@langchain/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import sbd from 'sbd';
 
-export const updatePinecone = async (client, indexName, scrappedContent, email, requestId) => {
+export const updatePinecone = async (client, indexName, blogsSection, email, requestId) => {
 
   try {
-    for (const section of scrappedContent) {
+    for (const blog of blogsSection) {
 
       // 1. Retrieve Pinecone index
       const index = client.Index(indexName);
 
       // 2. Process each document in the scrappedContent
-      const text = section;
+      const text = blog;
 
       // Use sbd library to split the text into sentences
       const sentences = sbd.sentences(text);
@@ -53,7 +53,7 @@ export const updatePinecone = async (client, indexName, scrappedContent, email, 
         const vector = {
           id: `${email}_document_${Date.now()}_${i}`,
           values: embeddingsArrays[i],
-          metadata: Object.assign({}, chunk.metadata, { loc: JSON.stringify(chunk.metadata.loc) }, { pageContent: chunk.pageContent }, { txtPath: `${email}_document_${Date.now()}_${i}` }, { requestId: requestId })
+          metadata: Object.assign({}, chunk.metadata, { loc: JSON.stringify(chunk.metadata.loc) }, { pageContent: chunk.pageContent }, { txtPath: `${email}_document_${Date.now()}_${i}` }, { requestId: requestId }, { email: email })
         };
 
         batch = [...batch, vector];

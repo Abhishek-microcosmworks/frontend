@@ -18,23 +18,23 @@ import { expireOtp } from '../../common/libs/expire-otp/index.js';
 
 export const verifyOtp = async (req, res) => {
   try { 
-    const { email, otp } = req.body;
+    const { email, name, otp } = req.body;
 
-    const emailConfirmation = await verifyEmail(email);
+    const emailConfirmation = await verifyEmail(email, name);
 
     if(emailConfirmation.error === true){
-      res.status(404).json({ message : 'Email not found!' })
+      return res.status(404).json({ message : 'Email not found!' })
     }
 
-      const otpResponse = await findOtp(email);
+      const otpResponse = await findOtp(email, otp);
 
       if(otpResponse.error === true){
-        res.status(403).json({ error: true, message: otpResponse.message });
+        return res.status(403).json({ error: true, message: otpResponse.message });
       }
 
         const currentTime = Math.floor(Date.now() / 1000);
 
-        if (currentTime > otpResponse.data.otpExp) {
+        if (currentTime > otpResponse.data.otpExp && otpResponse.data.isDeleted === false) {
              const otpRes = await expireOtp(email);
 
              if(otpRes.error === true){

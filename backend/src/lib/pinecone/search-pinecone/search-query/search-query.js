@@ -1,8 +1,12 @@
 import { Pinecone } from '@pinecone-database/pinecone'
 
-export async function searchQuery(queryEmbedding, indexName, requestId) {
+export async function searchQuery(embeddings, indexName, requestId) {
 
   try {
+
+    let concatenatedPageContent;
+
+  for(const embedding of embeddings){
 
     const client = new Pinecone({
       apiKey: `${process.env.PINECONE_API_KEY}`,
@@ -13,10 +17,10 @@ export async function searchQuery(queryEmbedding, indexName, requestId) {
       
     // Search for nearest neighbors in Pinecone
     const searchResult = await pinecoe_index.query({ 
-                                   vector: queryEmbedding,
-                                   filter:{
-                                     "requestId": {"$eq": requestId}
-                                   },
+                                   vector: embedding,
+                                  //  filter:{
+                                  //    "requestId": {"$eq": requestId}
+                                  //  },
                                    topK: 5, 
                                    includeValues: true, 
                                    includeMetadata: true 
@@ -24,7 +28,8 @@ export async function searchQuery(queryEmbedding, indexName, requestId) {
   
      // Extract pageContent from each match and concatenate them into a single string
      const pageContents = searchResult.matches.map((match) => match.metadata.pageContent);
-     const concatenatedPageContent = pageContents.join('\n');
+     concatenatedPageContent = pageContents.join('\n');
+    }
   
      return { error: false, data: concatenatedPageContent }
     

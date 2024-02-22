@@ -67,12 +67,10 @@ function Articles() {
           },
         },
       );
-      console.log('openAI data is', data);
       // setPercentage(data.percentage);
       // setCreationState(data.state);
       setBlogObject(data.data);
       const blogData = data.data.finalContent;
-      console.log('my data is', blogData);
       let htmlData = '';
       blogData.split('\n').forEach((line) => {
         htmlData += `<p>${line}</p>`;
@@ -103,14 +101,12 @@ function Articles() {
     setSummary(editedContent);
     setBlogContent(editedContent);
     setHideEditButton(true);
-    console.log(blogObject.blogData._id);
     const res = await axios.post(`${serverUrl}/blog/edit/blog`, {
       context,
       id: blogObject.blogData._id,
       blogContent: editedContent,
       email: blogObject.blogData.email,
     });
-    console.log(res);
     setBlogObject(res.data);
   };
 

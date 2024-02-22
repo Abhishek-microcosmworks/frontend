@@ -1,23 +1,23 @@
 import OpenAI from 'openai';
+import { extractSectionNames } from '../extract-sections-name/index.js';
+import { blogsContent } from '../../../../db/model/index.js';
+import { saveBlogsContent } from '../save-blogs-content/index.js';
 
-export async function generateSections(content) {
+export async function generateSections(content, email, requestId) {
 
-  const sectionNames = [];
+  const blogs = [];
+  const sectionsContentArray = []; // to store generated text for each section
 
   try {
     const openai = new OpenAI();
 
-    const generatedTextArray = []; // to store generated text for each section
-
-    for (const sectionData of content.data) {
-
-      console.log('content=====', sectionData);
+    for (const blogContent of content) {
 
       //const section = sectionData.content.join('\n');
 
-      const section = sectionData.blogContent;
+      //const scrappedContent = blogData.blogContent;
 
-      const prompt = `Given the following blog content, please divide it into sections \n\n${section}\n\n`;
+      const prompt = `Given the following blog content, please divide it into sections, labeling each section with a title in the format "Section 1: Title" and content = ${blogContent.content}`;
 
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
@@ -33,18 +33,27 @@ export async function generateSections(content) {
       // Extract relevant information from OpenAI response
       const generateText = response.choices[0].message.content;
 
-      // Store the generated text for each section
-      generatedTextArray.push(generateText);
-      // Extract and store the section name
-      const sectionNameRegex = /Section (\d+): ([^\n]+)/g;
-      let match;
-      while ((match = sectionNameRegex.exec(generateText)) !== null) {
-        const sectionName = match[2];
-        sectionNames.push(sectionName);
+      const sectionsName = await extractSectionNames(generateText);
+
+      if (sectionsName.error === true) {
+        return { error: true, message: sectionsName.message };
       }
+
+      const result = await saveBlogsContent(email, blogContent.url, requestId, blogContent.content, sectionsName.data);
+
+      if (result.error === true) {
+        return { error: true, message: result.message };
+      }
+
+      sectionsContentArray.push(generateText);
+      blogs.push(result.data);
+
+      // // Store the generated text for each section
+      // generatedTextArray.push(generateText);
+      // blogs.push(result)
     }
 
-    return { error: false, data: generatedTextArray };
+    return { error: false, data: blogs, sectionsContent: sectionsContentArray };
   } catch (error) {
     console.log(error);
 

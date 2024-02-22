@@ -40,7 +40,6 @@ function Popup({
       email: localStorage.getItem('email'),
     });
 
-    console.log(res.data.images);
     setImagesUrl(res.data.images);
   }
 
@@ -50,12 +49,10 @@ function Popup({
       const matches = blogcontent.match(/<p>(.*?)<\/p>/g);
       const cleanedContent = matches ? matches.map((match) => match.replace(/<\/?p>/g, '')).join('') : '';
       const finalCleanedContent = cleanedContent.replace(/"/g, '');
-      console.log(finalCleanedContent);
       const response = await axios.post(`${serverUrl}/gen-context`, {
         blogContent: `${finalCleanedContent}`,
       });
 
-      console.log(blogContext);
       setBlogContext(response.data.choices[0].message.content);
       setContextGenerating(false);
       setButtonClicked(true);
@@ -70,13 +67,11 @@ function Popup({
       setIsLoading(true);
 
       if (blogContext !== '') {
-        console.log(blogContext);
         const imageResponse = await axios.post(`${serverUrl}/gen-image`, {
           prompt: blogContext,
           email: localStorage.getItem('email'),
         });
 
-        console.log(imageResponse.data.data[0].url);
         getImages();
         setImageUrl(imageResponse.data.data[0].url);
         setButtonClicked(true);
@@ -84,7 +79,6 @@ function Popup({
         const matches = blogcontent.match(/<p>(.*?)<\/p>/g);
         const cleanedContent = matches ? matches.map((match) => match.replace(/<\/?p>/g, '')).join('') : '';
         const finalCleanedContent = cleanedContent.replace(/"/g, '');
-        console.log(finalCleanedContent);
         const response = await axios.post(`${serverUrl}/gen-context`, {
           blogContent: `${finalCleanedContent}`,
         });

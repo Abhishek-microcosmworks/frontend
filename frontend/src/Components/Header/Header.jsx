@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import { Link, useNavigate } from 'react-router-dom';
 
+import axios from 'axios';
+
 import companyLogo from '../../assets/images/media-connects-final.png';
 
 import './Header.css';
@@ -15,35 +17,32 @@ function Header(
     setShowOtpForm,
     setShowLogin,
     setEmail,
+    setName,
   },
 ) {
   const [showLinks, setShowLinks] = useState(false);
   const [showBurgerIcon, setShowBurgerIcon] = useState(false);
   const navigate = useNavigate();
   const serverUrl = 'https://mediaconnects.live/api';
+
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await fetch(`${serverUrl}/logout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
+      const res = await axios.post(`${serverUrl}/logout`, {
+        token,
       });
 
-      if (response.ok) {
-        setIsLoggedIn(false);
-        setEmail('');
-        setShowOtpForm(false);
-        localStorage.removeItem('token');
-        localStorage.removeItem('email');
-        localStorage.removeItem('expiresAt');
-        setShowLogin(true);
-        navigate('/');
-      } else {
-        console.error('Logout failed');
-      }
+      console.log(res.data.data);
+      setIsLoggedIn(false);
+      setEmail('');
+      setName('');
+      setShowOtpForm(false);
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      localStorage.removeItem('expiresAt');
+      localStorage.removeItem('name');
+      setShowLogin(true);
+      navigate('/');
     } catch (error) {
       console.error('An error occurred during logout', error);
     }
@@ -92,8 +91,8 @@ function Header(
               className="nav-links"
               style={{ display: showLinks ? 'flex' : 'block' }}
             >
-              {isLoggedIn && <Link to="/">Articles</Link>}
-              {isLoggedIn && <Link to="/history">History</Link>}
+              {isLoggedIn && <Link to="/">Craft Blog</Link>}
+              {/* {isLoggedIn && <Link to="/history">Blogs</Link>} */}
 
               <button className="btn_logout" type="button" onClick={handleLogout}>
                 Logout
@@ -103,8 +102,8 @@ function Header(
         </div>
       ) : (
         <div className="nav-links">
-          {isLoggedIn && <Link to="/">Articles</Link>}
-          {isLoggedIn && <Link to="/history">History</Link>}
+          {isLoggedIn && <Link to="/">Craft Blog</Link>}
+          {/* {isLoggedIn && <Link to="/history">Blogs</Link>} */}
 
           <button className="btn_logout" type="button" onClick={handleLogout}>
             Logout
@@ -121,6 +120,7 @@ Header.propTypes = {
   setShowOtpForm: PropTypes.func.isRequired,
   setShowLogin: PropTypes.func.isRequired,
   setEmail: PropTypes.func.isRequired,
+  setName: PropTypes.func.isRequired,
 };
 
 export default Header;

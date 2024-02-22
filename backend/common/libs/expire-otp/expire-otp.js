@@ -5,11 +5,9 @@ export async function expireOtp(email){
   try {
     const otpResponse = await otpGeneration.updateMany(
       { email },
-      { isDeleted: true },
-      { new: true },
-    )
-  
-    console.log('otp-response=====',otpResponse)
+      { $set: { isDeleted: true } },
+      { new: true }
+    );
     
     return { error: false, message: 'The otp has been expired!' };
   } catch (error) {

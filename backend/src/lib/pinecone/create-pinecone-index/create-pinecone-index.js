@@ -17,18 +17,23 @@ export async function createPineconeIndex( client, indexName, vectorDimension) {
         dimension: vectorDimension,
         metric: 'cosine',
         spec: {
-          serverless: {
-            cloud: 'aws',
-            region: 'us-west-2',
-          },
+          pod: {
+            environment: 'gcp-starter',
+            podType: 'p1.x1',
+            pods: 1,
+            metadata_config: {
+              indexed: ["requestId", "pageContent", "txtPath", "email"]
+            }
+          }
         },
       });
   
       // 5. Wait for index initialization
-      await new Promise((resolve) => setTimeout(resolve, timeout));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       return { error: false, message: 'Index has been created!' }
     }
   } catch (error) {
+    console.log('Error happned while creating an index.',error.message)
     return { error: true, message: 'Error happned while creating an index.' }
   }
   };
