@@ -134,6 +134,7 @@ function Login({ setShowLogin }) {
       console.log(error);
       const errorData = error.response.data;
       setLoginError(errorData.message);
+      setIsLoading(false);
     }
   };
   const handleResendOtp = async (e) => {
