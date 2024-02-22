@@ -3,7 +3,11 @@ import { RegisterData } from '../../../db/model/index.js';
 export const verifyEmail = async (email, name) => {
 
    try {
-      const userEmail = await RegisterData.findOne({ email, name });
+      const userEmail = await RegisterData.findOneAndUpdate(
+         { email },
+         { name: name },
+         { new: true }
+         );
 
       if (userEmail === null) {
          return { error: true, message: 'Email or Name is incorrect!' };

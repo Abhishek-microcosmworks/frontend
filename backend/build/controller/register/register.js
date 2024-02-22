@@ -6,10 +6,7 @@ export const register = async (req, res) => {
     const { name, email } = req.body;
     const user = await verifyEmail(email, name);
 
-    console.log('user===', user);
-
     if (user.error === true || user.message === 'Email or Name is incorrect!') {
-      4;
 
       const userData = await saveUser(name, email);
 
