@@ -107,6 +107,7 @@ function Register({ setShowLogin }) {
       );
       setShowOtpForm(true);
       setDisableResend(false);
+      setIsLoading(false);
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setIsLoading(false);
@@ -227,11 +228,14 @@ function Register({ setShowLogin }) {
                 )}
 
                 <button
+                  disabled={isLoading}
                   className="submit-btn"
                   onClick={handleLogin}
                   type="button"
                 >
-                  Submit
+                  { isLoading ? (
+                    <img src={loaderIcon} alt="loader" height="20" width="20" />)
+                    : 'Submit'}
                 </button>
                 {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
                 {successMsg && (

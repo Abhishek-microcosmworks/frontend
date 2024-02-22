@@ -108,6 +108,7 @@ function Login({ setShowLogin }) {
       );
       setShowOtpForm(true);
       setDisableResend(false);
+      setIsLoading(false);
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setIsLoading(false);
@@ -228,11 +229,14 @@ function Login({ setShowLogin }) {
                 )}
 
                 <button
+                  disabled={isLoading}
                   className="submit-btn"
                   onClick={handleLogin}
                   type="button"
                 >
-                  Submit
+                  { isLoading ? (
+                    <img src={loaderIcon} alt="loader" height="20" width="20" />)
+                    : 'Submit'}
                 </button>
                 {loginError && <div style={{ color: 'red' }}>{loginError}</div>}
                 {successMsg && (

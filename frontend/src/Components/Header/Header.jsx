@@ -8,6 +8,8 @@ import axios from 'axios';
 
 import companyLogo from '../../assets/images/media-connects-final.png';
 
+import loaderIcon from '../../assets/images/loader.gif';
+
 import './Header.css';
 
 function Header(
@@ -20,6 +22,7 @@ function Header(
     setName,
   },
 ) {
+  const [isLoading, setIsLoading] = useState(false);
   const [showLinks, setShowLinks] = useState(false);
   const [showBurgerIcon, setShowBurgerIcon] = useState(false);
   const navigate = useNavigate();
@@ -28,6 +31,7 @@ function Header(
   const handleLogout = async () => {
     const token = localStorage.getItem('token');
     try {
+      setIsLoading(true);
       const res = await axios.post(`${serverUrl}/logout`, {
         token,
       });
@@ -43,6 +47,7 @@ function Header(
       localStorage.removeItem('name');
       setShowLogin(true);
       navigate('/');
+      setIsLoading(false);
     } catch (error) {
       console.error('An error occurred during logout', error);
     }
@@ -95,7 +100,9 @@ function Header(
               {/* {isLoggedIn && <Link to="/history">Blogs</Link>} */}
 
               <button className="btn_logout" type="button" onClick={handleLogout}>
-                Logout
+                { isLoading ? (
+                  <img src={loaderIcon} alt="loader" height="20" width="20" />)
+                  : 'Logout'}
               </button>
             </div>
           )}
@@ -106,7 +113,9 @@ function Header(
           {/* {isLoggedIn && <Link to="/history">Blogs</Link>} */}
 
           <button className="btn_logout" type="button" onClick={handleLogout}>
-            Logout
+            { isLoading ? (
+              <img src={loaderIcon} alt="loader" height="20" width="20" />)
+              : 'Logout'}
           </button>
         </div>
       )}
