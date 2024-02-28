@@ -23,7 +23,7 @@ export const register = async (req, res) => {
           return res.status(500).json({ message: otpData.message })
         }else{
 
-          const mailerResponse = await sendOtpEmail(otpData.data);
+          const mailerResponse = await sendOtpEmail(otpData.data, name);
        
           if(mailerResponse.error === true){
             return res.status(500).json({ message: "Internal Server Error" });
@@ -40,7 +40,7 @@ export const register = async (req, res) => {
         if(otpData.error === true){
             res.status(403).json("Unauthorised!");
         }
-        const mailerResponse = await sendOtpEmail(otpData.data);
+        const mailerResponse = await sendOtpEmail(otpData.data, name);
 
         if(mailerResponse.error === true){
           return res.status(500).json({ message: "Internal Server Error" });

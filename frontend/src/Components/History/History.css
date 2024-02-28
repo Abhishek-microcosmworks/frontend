@@ -1,0 +1,129 @@
+.no-blogs-message {
+  text-align: center;
+  margin: 15% auto;
+}
+
+.no-blogs-message p{
+  font-size: 30px;
+  font-weight: 600;
+  font-style: "Noto Sans";
+  color: rgb(165, 163, 163);
+}
+
+.articles-link {
+  font-size: 20px;
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  color: teal;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.articles-link:hover {
+  color: black
+}
+
+.li {
+    text-decoration: none;
+   }
+   .history-container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: fixed;
+    top: 10%;
+    left: 0;
+    height: 86%;
+    width: 100%;
+   
+   }
+   .history-container::-webkit-scrollbar {
+     display: none;
+   }
+   #textarea {
+    width: 50%;
+    outline: none;
+    height: 400px;
+    margin-top: 1%;
+   }
+   
+   #textarea::-webkit-scrollbar {
+    width: 8px;
+    height: 2px;
+   }
+   
+   #textarea::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #008080;
+   }
+   
+   #textarea::-webkit-scrollbar-thumb {
+    height: 50%;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #008080;
+   }
+   
+   .getHistory {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3%;
+   }
+   .historyEdit-btn {
+    max-height: 70px;
+    height: 50px;
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
+   }
+   
+   .historyEdit-btn > button {
+    background-color: #008080;
+    width: 20%;
+    height: 100%;
+    outline: none;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Noto Sans';
+    border-radius: 6px;
+    font-size: 18px;
+   }
+   .history-item {
+   margin-bottom: 2%;
+   }
+   
+   .saveHistory-btn{
+       max-height: 70px;
+       height: 50px;
+       width: 100%;
+       /* margin-top: 2%; */
+       /* margin-bottom: 1%; */
+       display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+     }
+     
+     .saveHistory-btn > button{
+       background-color: #008080;
+       width: 20%;
+       height: 80%;
+       outline: none;
+       border: none;
+       color: #ffffff;
+       font-size: 16px;
+       font-weight: 500;
+       font-family: "Noto Sans";
+       border-radius: 6px;
+       margin-top: 0.8%;
+     }
+   
+     .history-editor {
+       display: flex;
+       flex-direction: column;
+       align-items: center; 
+       width: 100%; 
+     }

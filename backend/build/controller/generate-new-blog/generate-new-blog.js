@@ -10,11 +10,9 @@ export const generateBlog = async (req, res) => {
 
   const requestId = req.body.requestId;
 
-  console.log('id=========', requestId);
+  // const blog_array = urls.split(',')
 
-  const blog_array = urls.split(',');
-
-  const blog_data = await getBlogData(blog_array, email, requestId);
+  const blog_data = await getBlogData(urls, email, requestId);
 
   //await generateContext(blog_data);
 
@@ -106,7 +104,7 @@ export const generateBlog = async (req, res) => {
     return;
   }
 
-  const generatedBlog = await saveBlog(email, context, newBlog.data);
+  const generatedBlog = await saveBlog(email, context, newBlog.data, requestId);
 
   if (generatedBlog.error === true) {
     res.status(500).json({ message: generatedBlog.message });

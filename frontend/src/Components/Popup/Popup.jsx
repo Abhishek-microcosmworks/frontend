@@ -23,6 +23,8 @@ function Popup({
   summary,
   setButtonClicked,
   buttonClicked,
+  handleRegenerateBlog,
+  loader,
 }) {
   const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +37,7 @@ function Popup({
   const showHideClassName = show ? 'popup display-block' : 'popup display-none';
 
   const serverUrl = 'https://mediaconnects.live/api';
+
   async function getImages() {
     const res = await axios.post(`${serverUrl}/blog/getImages`, {
       email: localStorage.getItem('email'),
@@ -83,7 +86,6 @@ function Popup({
           blogContent: `${finalCleanedContent}`,
         });
 
-        console.log(blogContext);
         setBlogContext(response.data.choices[0].message.content);
 
         const imageResponse = await axios.post(`${serverUrl}/gen-image`, {
@@ -91,7 +93,6 @@ function Popup({
           email: localStorage.getItem('email'),
         });
 
-        console.log(imageResponse.data.data[0].url);
         getImages();
         setImageUrl(imageResponse.data.data[0].url);
       }
@@ -230,15 +231,22 @@ function Popup({
             <div className="btns-container" style={{ marginTop: buttonClicked ? '15%' : '35%' }}>
               {hideEditButton && (
                 <div className="edit-btn">
-                  <button onClick={handleEditClick} type="button">
+                  <button onClick={handleEditClick} type="button" disabled={loader || isLoading}>
                     Edit
                   </button>
                 </div>
               )}
+              <div className="regenerate-btn">
+                <button type="button" onClick={handleRegenerateBlog} disabled={loader}>
+                  {!loader ? 'Regenerate Blog' : <img src={spinner} alt="loading..." height={20} width={20} />}
+                </button>
+              </div>
               {
                 !editing && (
                   <div className="image-btn">
-                    <button type="button" onClick={handleGenerateImage}>{isLoading ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Image'}</button>
+                    <button type="button" onClick={handleGenerateImage} disabled={loader}>
+                      {isLoading ? <img src={spinner} alt="loading..." height={20} width={20} /> : 'Generate Image'}
+                    </button>
                   </div>
                 )
               }
@@ -263,6 +271,8 @@ Popup.propTypes = {
   summary: PropTypes.string.isRequired,
   setButtonClicked: PropTypes.func.isRequired,
   buttonClicked: PropTypes.bool.isRequired,
+  handleRegenerateBlog: PropTypes.func.isRequired,
+  loader: PropTypes.bool.isRequired,
 };
 
 export default Popup;

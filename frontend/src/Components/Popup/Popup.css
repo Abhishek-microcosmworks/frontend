@@ -199,7 +199,7 @@ textarea::-webkit-scrollbar-thumb {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4%;
+  gap: 6%;
   margin-top: 35%;
   margin-left: 2%;
 }
@@ -232,6 +232,27 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 .image-btn > button{
+  background-color: #008080;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Noto Sans";
+  border-radius: 6px;
+}
+
+
+.regenerate-btn{
+  max-height: 50px;
+  height: 40px;
+  max-width: 375px;
+  width: 100%;
+}
+
+.regenerate-btn > button{
   background-color: #008080;
   width: 100%;
   height: 100%;

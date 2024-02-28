@@ -10,7 +10,8 @@ export {
     saveBlog,
     findBlogs,
     updatedBlog,
-    generateContext
+    generateContext,
+    deleteBlogById
 } from './blog/index.js';
 
 export { calculateEmbeddingDistance } from './embedding-distance/index.js';

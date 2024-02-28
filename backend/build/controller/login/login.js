@@ -23,8 +23,7 @@ export const login = async (req, res, next) => {
         if (otpData.error === true) {
           return res.status(500).json({ message: otpData.message });
         } else {
-          console.log(otpData);
-          const mailerResponse = await sendOtpEmail(otpData.data);
+          const mailerResponse = await sendOtpEmail(otpData.data, name);
 
           if (mailerResponse.error === true) {
             return res.status(500).json({ message: "Internal Server Error" });
@@ -43,8 +42,7 @@ export const login = async (req, res, next) => {
       if (otpData.error === true) {
         return res.status(500).json({ message: otpData.message });
       } else {
-        console.log(otpData);
-        const mailerResponse = await sendOtpEmail(otpData.data);
+        const mailerResponse = await sendOtpEmail(otpData.data, name);
 
         if (mailerResponse.error === true) {
           return res.status(500).json({ message: "Internal Server Error" });

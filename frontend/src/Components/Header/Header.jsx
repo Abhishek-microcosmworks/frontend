@@ -26,6 +26,7 @@ function Header(
   const [showLinks, setShowLinks] = useState(false);
   const [showBurgerIcon, setShowBurgerIcon] = useState(false);
   const navigate = useNavigate();
+
   const serverUrl = 'https://mediaconnects.live/api';
 
   const handleLogout = async () => {
@@ -110,7 +111,7 @@ function Header(
       ) : (
         <div className="nav-links">
           {isLoggedIn && <Link to="/">Craft Blog</Link>}
-          {/* {isLoggedIn && <Link to="/history">Blogs</Link>} */}
+          {isLoggedIn && <Link to="/history">Blogs</Link>}
 
           <button className="btn_logout" type="button" onClick={handleLogout}>
             { isLoading ? (

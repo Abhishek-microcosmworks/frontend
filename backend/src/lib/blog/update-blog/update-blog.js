@@ -2,7 +2,7 @@ import { findBlog } from '../../../../common/index.js';
 
 import { saveBlog } from '../save-blog/index.js';
 
-export async function updatedBlog(email, context, responsefinalContent, id) {
+export async function updatedBlog(email, context, responsefinalContent, id, requestId) {
     try {
   
       const prevBlog = await findBlog(id);
@@ -16,13 +16,12 @@ export async function updatedBlog(email, context, responsefinalContent, id) {
       }
   
       // Update the values of isActive and isDeleted
-      prevBlog.isActive = true;
-      prevBlog.isDeleted = true;
+      prevBlog.data.isLatest = false;
   
       // Save the changes to the existing blog
-      await prevBlog.save();
+      await prevBlog.data.save();
   
-      const updatedBlog = await saveBlog(email, context, responsefinalContent);
+      const updatedBlog = await saveBlog(email, context, responsefinalContent, requestId);
 
       if(updatedBlog.error === true){
         return { error: true, message: updatedBlog.message }

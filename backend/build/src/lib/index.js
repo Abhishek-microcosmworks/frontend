@@ -1,6 +1,6 @@
 export { uploadImage } from './aws/index.js';
 
-export { generateConclusion, generateEmbeddings, generateIntroduction, generateNewBlog, generateSections, getBlogData, saveBlog, findBlogs, updatedBlog, generateContext } from './blog/index.js';
+export { generateConclusion, generateEmbeddings, generateIntroduction, generateNewBlog, generateSections, getBlogData, saveBlog, findBlogs, updatedBlog, generateContext, deleteBlogById } from './blog/index.js';
 
 export { calculateEmbeddingDistance } from './embedding-distance/index.js';
 

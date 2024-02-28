@@ -61,6 +61,7 @@ function Login({ setShowLogin }) {
   };
 
   const serverUrl = 'https://mediaconnects.live/api';
+
   useEffect(() => {
     if (showOtpForm) {
       startTimer();
@@ -116,9 +117,15 @@ function Login({ setShowLogin }) {
   };
 
   const handleLogin = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
+
+    if (otp === '') {
+      setErrorMessage('Please enter the 4 digit code!');
+      return;
+    }
+
     try {
+      setIsLoading(true);
       const res = await axios.post(`${serverUrl}/verify-otp`, {
         email,
         name,
@@ -130,11 +137,13 @@ function Login({ setShowLogin }) {
       localStorage.setItem('expiresAt', tokenExp);
       setIsLoggedIn(true);
       setIsLoading(false);
+      setOtp('');
     } catch (error) {
       console.log(error);
       const errorData = error.response.data;
       setLoginError(errorData.message);
       setIsLoading(false);
+      setOtp('');
     }
   };
   const handleResendOtp = async (e) => {
@@ -261,7 +270,7 @@ function Login({ setShowLogin }) {
                   </div>
                 </div>
                 <div className="login_container">
-                  <div className="heading">Welcome To the Media Connects</div>
+                  <div className="heading">Welcome To the Media Connects!</div>
                   {/* <button className="google-button" type="button">
                     Continue with Google
                   </button>

@@ -61,6 +61,7 @@ function Register({ setShowLogin }) {
   };
 
   const serverUrl = 'https://mediaconnects.live/api';
+
   useEffect(() => {
     if (showOtpForm) {
       startTimer();
@@ -115,9 +116,15 @@ function Register({ setShowLogin }) {
   };
 
   const handleLogin = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
+
+    if (otp === '') {
+      setErrorMessage('Please enter the 4 digit code!');
+      return;
+    }
+
     try {
+      setIsLoading(true);
       const res = await axios.post(`${serverUrl}/verify-otp`, {
         email,
         name,
@@ -260,7 +267,7 @@ function Register({ setShowLogin }) {
                   </div>
                 </div>
                 <div className="login_container">
-                  <div className="heading">Welcome To the Media Connects</div>
+                  <div className="heading">Welcome To the Media Connects!</div>
                   {/* <button className="google-button" type="button">
                     Continue with Google
                   </button>

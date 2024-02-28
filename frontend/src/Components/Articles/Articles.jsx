@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react';
-
 import axios from 'axios';
-
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
-import { v4 as uuidv4 } from 'uuid';
-
-// import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-
+import { v4 as uuidv4, v4 } from 'uuid';
 import spinner from '../../assets/images/loader.gif';
-
 import Popup from '../Popup/Popup';
-
+import plusIcon from '../../assets/images/plus.png';
+import minusIcon from '../../assets/images/minus.png';
 import './Articles.css';
-
-import 'react-circular-progressbar/dist/styles.css';
 
 function Articles() {
   const [context, setContext] = useState('');
@@ -24,15 +15,14 @@ function Articles() {
   const [editing, setEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
   const [url, setUrl] = useState('');
-  const [url1, setUrl1] = useState('');
+  const [urlInputs, setUrlInputs] = useState(['']); // State to manage multiple URL inputs
   const [loader, setLoader] = useState(false);
   const [blogcontent, setBlogContent] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const [hideEditButton, setHideEditButton] = useState(true);
   const [blogObject, setBlogObject] = useState({});
   const [buttonClicked, setButtonClicked] = useState(false);
-  // const [percentage, setPercentage] = useState(0);
-  // const [creationState, setCreationState] = useState('Analizing');
+  const [numInputs, setNumInputs] = useState(1);
 
   const serverUrl = 'https://mediaconnects.live/api';
 
@@ -48,14 +38,14 @@ function Articles() {
     setLoader(true);
     const email = localStorage.getItem('email');
     const userToken = localStorage.getItem('token');
-
     const requestId = uuidv4();
+
     try {
       const { data } = await axios.post(
         `${serverUrl}/article`,
         {
           requestId,
-          urls: url,
+          urls: urlInputs,
           context,
           blogcontent,
           email,
@@ -67,8 +57,6 @@ function Articles() {
           },
         },
       );
-      // setPercentage(data.percentage);
-      // setCreationState(data.state);
       setBlogObject(data.data);
       const blogData = data.data.finalContent;
       let htmlData = '';
@@ -78,9 +66,7 @@ function Articles() {
 
       setSummary(htmlData);
       setLoader(false);
-      // console.log('so content title is ', context);
       setUrl(url);
-      setUrl1(url1);
       setBlogContent(htmlData);
       setShowPopup(true);
     } catch (error) {
@@ -88,6 +74,7 @@ function Articles() {
       setLoader(false);
     }
   };
+
   const handleClosePopup = () => {
     setShowPopup(false);
     setContext('');
@@ -97,17 +84,112 @@ function Articles() {
   };
 
   const handleSaveClick = async () => {
-    setEditing(false);
-    setSummary(editedContent);
-    setBlogContent(editedContent);
-    setHideEditButton(true);
-    const res = await axios.post(`${serverUrl}/blog/edit/blog`, {
-      context,
-      id: blogObject.blogData._id,
-      blogContent: editedContent,
-      email: blogObject.blogData.email,
-    });
-    setBlogObject(res.data);
+    const userToken = localStorage.getItem('token');
+    try {
+      console.log('blogObject', blogObject);
+      setEditing(false);
+      setSummary(editedContent);
+
+      setBlogContent(editedContent);
+      setHideEditButton(true);
+      const res = await axios.post(
+        `${serverUrl}/blog/edit/blog`,
+        {
+          context,
+          id: blogObject._id,
+          blogContent: editedContent,
+          email: blogObject.email,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: userToken,
+          },
+        },
+      );
+
+      console.log(res.data);
+      setBlogObject(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAddUrlInput = () => {
+    if (numInputs < 3) {
+      setUrlInputs([...urlInputs, '']);
+      setNumInputs(numInputs + 1);
+    }
+  };
+
+  const handleRemoveUrlInput = () => {
+    if (numInputs > 1) {
+      setUrlInputs(urlInputs.slice(0, urlInputs.length - 1)); // Remove the last two inputs
+      setNumInputs(numInputs - 1); // Update the count accordingly
+    }
+  };
+
+  const handleUrlInputChange = (index, value) => {
+    const updatedInputs = [...urlInputs];
+    updatedInputs[index] = value;
+
+    setUrlInputs(updatedInputs);
+  };
+
+  // const handleRemoveUrlInput = (index) => {
+  //   const updatedInputs = [...urlInputs];
+  //   updatedInputs.splice(index, 1);
+  //   setUrlInputs(updatedInputs);
+  //   setNumInputs(numInputs - 1);
+  // };
+
+  const calculateMarginTop = () => {
+    if (urlInputs.length === 2) {
+      return '80px';
+    }
+    if (urlInputs.length === 3) {
+      return '150px';
+    }
+    return '30px';
+  };
+
+  const handleRegenerateBlog = async () => {
+    try {
+      const email = localStorage.getItem('email');
+      const userToken = localStorage.getItem('token');
+      const requestId = uuidv4();
+      setLoader(true);
+      const { data } = await axios.post(
+        `${serverUrl}/article`,
+        {
+          requestId,
+          urls: urlInputs,
+          context,
+          blogcontent,
+          email,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: userToken,
+          },
+        },
+      );
+      setBlogObject(data.data);
+      const blogData = data.data.finalContent;
+      let htmlData = '';
+      blogData.split('\n').forEach((line) => {
+        htmlData += `<p>${line}</p>`;
+      });
+      setSummary(htmlData);
+      setLoader(false);
+      setUrl(url);
+      setBlogContent(htmlData);
+      setLoader(false);
+    } catch (error) {
+      console.error(error);
+      setLoader(false);
+    }
   };
 
   return (
@@ -125,26 +207,39 @@ function Articles() {
         />
       </div>
       <div className="url_label">
-        <span className="refernce_url_txt">Reference URL</span>
-        <input
-          className="input_label_url"
-          placeholder="Reference URL"
-          type="text"
-          id="reference"
-          name="reference"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-      </div>
+        <span className="refernce_url_txt">Reference URLs</span>
+        <div className="input-container">
+          <div className="add-input-btn-container">
+            <button type="button" onClick={handleAddUrlInput} disabled={numInputs >= 3}>
+              <img src={plusIcon} alt="plusIcon" />
+            </button>
+            <button type="button" onClick={handleRemoveUrlInput} disabled={numInputs <= 1}>
+              <img src={minusIcon} alt="minusIcon" />
+            </button>
+          </div>
+          <div className="all-inputs">
+            {urlInputs.map((urlInput, index) => (
+              <input
+                key={v4()}
+                className="input_label_url"
+                placeholder={`Reference URL ${index + 1}`}
+                type="text"
+                value={urlInput}
+                onChange={(e) => handleUrlInputChange(index, e.target.value)}
+              />
 
-      <div id="textareaBox" rows="2" cols="50" />
-      <div className="btn_blog">
+            ))}
+          </div>
+        </div>
+      </div>
+      {/* <div id="textareaBox" rows="2" cols="50" /> */}
+      <div className="btn_blog" style={{ marginTop: calculateMarginTop() }}>
         <button
           onClick={handleSubmit}
-          style={{ backgroundColor: !context || !url ? '#66b2b2' : '#008080' }}
+          style={{ backgroundColor: !context || !urlInputs.every(Boolean) ? '#66b2b2' : '#008080' }}
           className="btn_blog_generator"
           type="submit"
-          disabled={!context || !url}
+          disabled={!context || !urlInputs.every(Boolean)}
         >
           {loader ? (
             <img src={spinner} alt="spinner" width="20px" height="20px" />
@@ -153,39 +248,7 @@ function Articles() {
           )}
         </button>
       </div>
-      {/* {loader && (
-        <div className="backdrop">
-          <div className="progress-container">
-            <CircularProgressbar
-              value={percentage}
-              text={`${percentage}%`}
-              className="circular-progress"
-              styles={
-              buildStyles({
-                // Rotation of path and trail, in number of turns (0-1)
-                rotation: 0,
-                // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
-                strokeLinecap: 'butt',
-                // Text size
-                textSize: '16px',
-                // How long animation takes to go from one percentage to another, in seconds
-                pathTransitionDuration: 0.5,
-                // Can specify path transition in more detail, or remove it entirely
-                // pathTransition: 'none',
-                // Colors
-                pathColor: 'rgb(0,128,128)',
-                textColor: 'teal',
-                trailColor: '#d6d6d6',
-                backgroundColor: '#3e98c7',
-              })
-            }
-            />
-            <div className="state-container">
-              <span>{`${creationState}...`}</span>
-            </div>
-          </div>
-        </div>
-      )} */}
+
       <Popup
         show={showPopup}
         handleClose={handleClosePopup}
@@ -198,6 +261,8 @@ function Articles() {
         summary={summary}
         setButtonClicked={setButtonClicked}
         buttonClicked={buttonClicked}
+        handleRegenerateBlog={handleRegenerateBlog}
+        loader={loader}
       >
         <h2>Blog Generated Successfully!</h2>
         <div className="editor">

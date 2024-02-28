@@ -14,7 +14,8 @@ import {
   getImages,
   generateEmbeddings,
   logout,
-  getHistory
+  getHistory,
+  deleteBlog
 }  from '../controller/index.js';
 import { authenticateToken } from '../src/lib/index.js';
 
@@ -34,5 +35,6 @@ router.post('/edit-image',authenticateToken,editImage);
 router.post('/gen-context',authenticateToken, getContext);
 router.post('/blog/getImages',authenticateToken, getImages);
 router.post('/blog/edit/blog',authenticateToken, editBlog);
+router.post('/blog/delete',authenticateToken, deleteBlog);
 
 export default router;

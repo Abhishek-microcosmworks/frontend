@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { login, verifyOtp, register, resendOtp, editBlog, editImage, getContext, generateImage, generateKeywords, generateBlog, getImages, generateEmbeddings, logout, getHistory } from '../controller/index.js';
+import { login, verifyOtp, register, resendOtp, editBlog, editImage, getContext, generateImage, generateKeywords, generateBlog, getImages, generateEmbeddings, logout, getHistory, deleteBlog } from '../controller/index.js';
 import { authenticateToken } from '../src/lib/index.js';
 
 const router = express.Router();
@@ -19,5 +19,6 @@ router.post('/edit-image', authenticateToken, editImage);
 router.post('/gen-context', authenticateToken, getContext);
 router.post('/blog/getImages', authenticateToken, getImages);
 router.post('/blog/edit/blog', authenticateToken, editBlog);
+router.post('/blog/delete', authenticateToken, deleteBlog);
 
 export default router;

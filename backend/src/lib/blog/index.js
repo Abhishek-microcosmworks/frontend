@@ -17,3 +17,5 @@ export { findBlogs } from './find-blogs/index.js';
 export { updatedBlog } from './update-blog/index.js';
 
 export { generateContext } from './generate-context/generate-context.js';
+
+export { deleteBlogById } from './delete-blog-by-id/index.js';

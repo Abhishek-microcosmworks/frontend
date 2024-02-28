@@ -29,3 +29,5 @@ export { logout } from './logout/index.js';
 export { generateBlog } from './generate-new-blog/index.js';
 
 export { getHistory } from './get-history/index.js';
+
+export { deleteBlog } from './delete-blog/index.js';

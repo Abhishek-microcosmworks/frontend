@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.72870fa0.css",
-    "main.js": "/static/js/main.99aa6334.js",
+    "main.css": "/static/css/main.7ee7a53f.css",
+    "main.js": "/static/js/main.46bcb859.js",
     "static/media/wepik-export-lT.png": "/static/media/wepik-export-2024010311121128lT.b1103cebe342d7c4668c.png",
     "static/media/loader.gif": "/static/media/loader.90672f1deffccbcdf4f1.gif",
     "static/media/noto-sans-devanagari-400-normal.woff": "/static/media/noto-sans-devanagari-400-normal.9ecc9ba0fbe6be5443a7.woff",
@@ -22,11 +22,11 @@
     "static/media/noto-sans-vietnamese-400-normal.woff2": "/static/media/noto-sans-vietnamese-400-normal.999fbba78534aa9c54f3.woff2",
     "static/media/noto-sans-greek-ext-400-normal.woff2": "/static/media/noto-sans-greek-ext-400-normal.a53d3a503b7febd2de61.woff2",
     "index.html": "/index.html",
-    "main.72870fa0.css.map": "/static/css/main.72870fa0.css.map",
-    "main.99aa6334.js.map": "/static/js/main.99aa6334.js.map"
+    "main.7ee7a53f.css.map": "/static/css/main.7ee7a53f.css.map",
+    "main.46bcb859.js.map": "/static/js/main.46bcb859.js.map"
   },
   "entrypoints": [
-    "static/css/main.72870fa0.css",
-    "static/js/main.99aa6334.js"
+    "static/css/main.7ee7a53f.css",
+    "static/js/main.46bcb859.js"
   ]
 }
