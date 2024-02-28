@@ -69,6 +69,7 @@ function Articles() {
       setUrl(url);
       setBlogContent(htmlData);
       setShowPopup(true);
+      setUrlInputs(['']);
     } catch (error) {
       console.error(error);
       setLoader(false);
@@ -86,7 +87,6 @@ function Articles() {
   const handleSaveClick = async () => {
     const userToken = localStorage.getItem('token');
     try {
-      console.log('blogObject', blogObject);
       setEditing(false);
       setSummary(editedContent);
 
@@ -108,7 +108,6 @@ function Articles() {
         },
       );
 
-      console.log(res.data);
       setBlogObject(res.data.data);
     } catch (error) {
       console.log(error);
@@ -198,6 +197,7 @@ function Articles() {
       <div className="title_label">
         <span className="refernce_url_txt">Blog Title</span>
         <input
+          disabled={loader}
           className="input_label_context"
           type="search context"
           placeholder="Enter Blog Title"
@@ -210,10 +210,10 @@ function Articles() {
         <span className="refernce_url_txt">Reference URLs</span>
         <div className="input-container">
           <div className="add-input-btn-container">
-            <button type="button" onClick={handleAddUrlInput} disabled={numInputs >= 3}>
+            <button type="button" onClick={handleAddUrlInput} disabled={numInputs >= 3 || loader}>
               <img src={plusIcon} alt="plusIcon" />
             </button>
-            <button type="button" onClick={handleRemoveUrlInput} disabled={numInputs <= 1}>
+            <button type="button" onClick={handleRemoveUrlInput} disabled={numInputs <= 1 || loader}>
               <img src={minusIcon} alt="minusIcon" />
             </button>
           </div>
@@ -221,6 +221,7 @@ function Articles() {
             {urlInputs.map((urlInput, index) => (
               <input
                 key={v4()}
+                disabled={loader}
                 className="input_label_url"
                 placeholder={`Reference URL ${index + 1}`}
                 type="text"
@@ -239,7 +240,7 @@ function Articles() {
           style={{ backgroundColor: !context || !urlInputs.every(Boolean) ? '#66b2b2' : '#008080' }}
           className="btn_blog_generator"
           type="submit"
-          disabled={!context || !urlInputs.every(Boolean)}
+          disabled={!context || !urlInputs.every(Boolean) || loader}
         >
           {loader ? (
             <img src={spinner} alt="spinner" width="20px" height="20px" />

@@ -229,6 +229,7 @@ textarea::-webkit-scrollbar-thumb {
   height: 40px;
   max-width: 375px;
   width: 100%;
+  display: none;
 }
 
 .image-btn > button{
