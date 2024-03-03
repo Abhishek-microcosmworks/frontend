@@ -78,7 +78,6 @@ export const sendOtpEmail = async (data, name) => {
            <p class="message">Your One-Time Password (OTP) for login is: <span class="otp">${data.otp}</span></p>
            <p class="message">Please use this code within ${timeLeftMessage} to securely log in.</p>
            <p class="message">If you didn't request this, kindly disregard this email.</p>
-           <p class="message">Thank you for choosing our services.</p>
 
            <p class="message">Thank you for choosing our services.</p>
            <p class="message">Best regards,<br>Media Connects Team</p>
