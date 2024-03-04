@@ -20,7 +20,7 @@
     font-size: 40px;
     font-family:"Noto Sans";
     font-weight: 600;
-    margin-top: 4%;
+    margin-top: 10%;
 }
 .input_label_context{
     min-height: 60vh;
@@ -283,7 +283,7 @@
         font-size: 30px;
         font-family:"Noto Sans";
         font-weight: 600;
-        margin-top: 1%;
+        margin-top: 10%;
     }
 
     .btn_blog_generator{
@@ -559,7 +559,7 @@
         font-size: 30px;
         font-family:"Noto Sans";
         font-weight: 600;
-        margin-top: 1%;
+        margin-top: 10%;
     }
 
     .btn_blog_generator{
@@ -644,7 +644,7 @@
         font-size: 30px;
         font-family:"Noto Sans";
         font-weight: 600;
-        margin-top: 1%;
+        margin-top: 10%;
     }
 
     .title_label{
