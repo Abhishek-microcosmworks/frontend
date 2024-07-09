@@ -14,7 +14,7 @@
   "dependencies": {
     "@langchain/openai": "^0.0.13",
     "@pinecone-database/pinecone": "^2.0.1",
-    "aws-sdk": "^2.1513.0",
+    "aws-sdk": "^2.1655.0",
     "axios": "^1.5.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",

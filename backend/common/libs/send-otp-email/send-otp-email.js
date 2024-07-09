@@ -1,19 +1,27 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
+import aws from 'aws-sdk';
+
+// Configure AWS SDK
+aws.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
+});
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
-  port: 465,
+  service: "ses",
+  host: "no-reply@microcosmworks.com",
+  port: 587,
   secure: true,
   auth: {
-    user: "abhishek.microcosmworks.mailme@gmail.com",
-    pass: "luuv kmkg riea vtin",
+    user: process.env.AWS_USER,
+    pass: process.env.AWS_PASS,
   },
 });
 
 export const sendOtpEmail = async (data, name) => {
   const otpExpTime = data.otpExp;
-  const currentTime = Math.floor(new Date().getTime() / 1000); // Current time in seconds
+  const currentTime = Math.floor(new Date().getTime() / 1000);
   const remainingTimeInSeconds = otpExpTime - currentTime;
 
   let timeLeftMessage;
@@ -24,9 +32,9 @@ export const sendOtpEmail = async (data, name) => {
 
   try {
     const mailOptions = {
-      from: "abhishek.microcosmworks.mailme@gmail.com",
+      from: 'no-reply@microcosmworks.com',
       to: data.email,
-      subject: "One-Time Password (OTP) for Login",
+      subject: 'One-Time Password (OTP) for Login',
       html: `
        <html>
         <head>
