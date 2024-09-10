@@ -1,0 +1,220 @@
+
+/* Base Styles */
+.container-fluid {
+    padding: 0 15px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.col-2,
+.col-8 {
+    padding: 15px;
+}
+
+/* Styles for Tablet Devices (Portrait and Landscape) */
+@media (max-width: 1200px) {
+    /* Stack sidebar and center content */
+    .col-2 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .col-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    /* Hide Right Sidebar */
+    .col-2.border-start {
+        display: none;
+    }
+
+    /* Adjust Text Sizes */
+    .navbar-brand {
+        font-size: 28px;
+    }
+
+    /* Adjust Input Sizes */
+    .input-styles {
+        font-size: 16px;
+    }
+
+    .p-4 {
+        padding: 10px;
+    }
+
+    .mt-3, .mb-3 {
+        margin: 10px 0;
+    }
+
+    .circular-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}
+
+/* Styles for Mobile Devices */
+@media (max-width: 768px) {
+    /* Stack main content and left sidebar */
+    .row {
+        flex-direction: column;
+    }
+
+    /* Make Center Panel Full Width */
+    .col-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Left Sidebar appears below the Center Panel */
+    .col-2 {
+        order: 2;
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-top: 15px; /* Add some space between the center panel and left sidebar */
+    }
+
+    /* Hide Right Sidebar */
+    .col-2.border-start {
+        display: none;
+    }
+
+    /* Navbar Adjustments */
+    .navbar-brand {
+        font-size: 24px;
+    }
+
+    .btn {
+        font-size: 14px;
+    }
+
+    /* Input and Button Adjustments */
+    .input-styles {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .circular-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+
+    /* Spacing Adjustments */
+    .p-4 {
+        padding: 5px;
+    }
+
+    .mt-3, .mb-3 {
+        margin: 5px 0;
+    }
+}
+
+/* Styles for Small Mobile Devices */
+@media (max-width: 576px) {
+    /* Navbar Adjustments */
+    .navbar-brand {
+        font-size: 20px;
+    }
+
+    .btn {
+        font-size: 12px;
+    }
+
+    /* Input and Button Adjustments */
+    .input-styles {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .circular-btn {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+
+    /* Adjust Text Areas */
+    textarea {
+        font-size: 14px;
+    }
+
+    /* Further Reduce Padding */
+    .p-4 {
+        padding: 2px;
+    }
+
+    .mt-3, .mb-3 {
+        margin: 3px 0;
+    }
+}
+@media (max-width: 991.98px) { /* Breakpoint for large devices and below */
+    .order-1 {
+      order: 2 !important;
+    }
+  
+    .order-2 {
+      order: 1 !important;
+    }
+  
+    .order-3 {
+      order: 3 !important;
+      display: none; /* Hide right sidebar on smaller screens */
+    }
+  
+    .border-start, .border-end {
+      border: none !important;
+    }
+  
+    .col-lg-8, .col-lg-2 {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .col-lg-2 {
+      margin-bottom: 1rem;
+    }
+  
+    .div-styles {
+      width: 100%;
+    }
+  }
+  @media (max-width: 991.98px) { /* Breakpoint for large devices and below */
+    .order-1 {
+      order: 2 !important;
+    }
+  
+    .order-2 {
+      order: 1 !important;
+    }
+  
+    .order-3 {
+      order: 3 !important;
+      display: none; /* Hide right sidebar on smaller screens */
+    }
+  
+    .border-start, .border-end {
+      border: none !important;
+    }
+  
+    .col-lg-8, .col-lg-2 {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .col-lg-2 {
+      margin-bottom: 1rem;
+    }
+  
+    .div-styles {
+      width: 100%;
+    }
+  }
+    

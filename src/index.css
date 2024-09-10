@@ -1,0 +1,9 @@
+
+body{
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.app-container {
+  min-height: 100vh;
+}

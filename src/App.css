@@ -1,0 +1,14 @@
+.app-container {
+  background-color: #1e1e1e;
+}
+.left-sidebar, .right-sidebar {
+  background-color: #2a2a2a;
+  height: calc(100vh - 56vh);
+}
+
+.central-content {
+  background-color: #333333;
+  height: calc(100vh - 56vh);
+  overflow-y:auto ;
+  
+}
