@@ -97,6 +97,7 @@ export const Dashboard = () => {
       setCurrentPage("viewBlog");
       setIsEditing(false);
       setBlogUrls([""]);
+      getAllBlogs();
     } catch (error) {
       console.error(error);
     } finally {
@@ -130,6 +131,7 @@ export const Dashboard = () => {
         finalContent: editableBlog,
       }));
       setIsEditing(false);
+      getAllBlogs();
     } catch (error) {
       console.error("Error saving blog:", error);
     }

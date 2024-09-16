@@ -24,6 +24,7 @@ export const LoginPage = () => {
       return;
     }
 
+    setError("");
     try {
       setIsLoading(true);
       const response = await axios.post(`${API}/login`, {
@@ -42,6 +43,7 @@ export const LoginPage = () => {
   const handleVerifyOtp = async (enteredOtp) => {
     setIsLoading(true);
 
+    setError("");
     try {
       const response = await axios.post(
         `${API}/verify-otp`,
