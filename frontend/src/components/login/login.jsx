@@ -73,7 +73,6 @@ export const LoginPage = () => {
       setError("An error occurred during OTP verification. Please try again.");
     } finally {
       setIsLoading(false);
-      // Don't close the OTP modal if there's an error
     }
   };
   
