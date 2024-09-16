@@ -11,7 +11,9 @@ export {
     findBlogs,
     updatedBlog,
     generateContext,
-    deleteBlogById
+    deleteBlogById,
+    addFeedback,
+    findBlogById
 } from './blog/index.js';
 
 export { calculateEmbeddingDistance } from './embedding-distance/index.js';

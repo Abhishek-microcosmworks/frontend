@@ -1,0 +1,1 @@
+export { blogSchema } from './blogs.js';

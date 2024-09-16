@@ -1,0 +1,334 @@
+.circular-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 18px;
+  outline: none;
+  }
+  
+.input-styles{
+    border: solid #e9ecef 1px !important;
+}
+
+.div-styles{
+    margin-top: 10%;
+}
+
+.buttons-styles{
+    margin-top: 50%;
+}
+
+.editable {
+    border: 2px solid #000000;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+  }
+  
+  .readonly {
+    border: 1px solid #ced4da;
+    background-color: #e9ecef;
+    cursor: not-allowed;
+  }
+
+  /* dashboard-page.css */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    max-height: 100vh;
+  }
+  
+  .sidebar-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+  }
+  
+  .fixed-buttons {
+    position: absolute;
+    bottom: 20px;
+    
+  }
+  
+.w-40 {
+  width: 40%;
+}
+
+.d-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* viewBlog content container is scrollable */
+.scrollable-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.main-container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.view-blog-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.floating-buttons {
+  position: fixed;
+  top: 20%;
+  right: 7%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.save-btn, .edit-btn {
+  width: 100px;
+}
+
+.scrollable-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #e0e0e0, #f8f9fa);
+  border-radius: 10px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  background-color: #212529;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+  background-color: #212529;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); 
+}
+
+.scrollable-content {
+  scrollbar-width: thin;
+  scrollbar-color: #212529 transparent;
+}
+
+.scrollable-content {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollable-content:hover {
+  scrollbar-width: thin;
+  -ms-overflow-style: auto;
+}
+
+.center-div{
+  width: 60%;
+  margin-top: 20%;
+}
+
+.font-css{
+  font-size: 3.2vw;
+}
+
+/* Medium screens (991px to 768px) */
+@media (max-width: 991.98px) and (min-width: 768px) {
+  .floating-buttons {
+    top: 20%;
+    right: 1%;
+    width: auto;
+  }
+
+  .save-btn, .edit-btn {
+    width: 80px;
+    height: 35px;
+    font-size: 14px;
+    padding: 5px;
+  }
+
+  .logout-btn {
+    width: auto;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .blog-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .view-blog-container {
+    padding: 15px;
+    width: 95%;
+  }
+
+  .center-div{
+    width: 80%;
+    margin-top: 50%;
+  }
+}
+
+
+/* Small screens (less than 768px) */
+@media (max-width: 767.98px) {
+
+  .sidebar {
+    height: 60%;
+  }
+
+  .floating-buttons {
+    top: 25%;
+    right: 5%;
+  }
+
+  .save-btn, .edit-btn {
+    width: 70px;
+    height: 30px;
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  .logout-btn {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .blog-title {
+    font-size: 16px;
+  }
+
+  .view-blog-container {
+    padding: 10px;
+  }
+  .center-div{
+    width: 80%;
+    margin-top: 5%;
+  }
+}
+
+
+/* Medium screens (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: 30%;
+  }
+
+  .main-content {
+    width: 70%;
+  }
+
+  .view-blog-container {
+    padding: 10px;
+  }
+
+  .view-blog-container > div {
+    width: 90% !important;
+  }
+}
+
+/* Small screens (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .floating-buttons {
+    position: static;
+    margin-top: 20px;
+  }
+
+  .save-btn, .edit-btn {
+    width: 100%;
+  }
+}
+
+/* Extra small screens (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .sidebar-content {
+    max-height: 200px;
+  }
+
+  .view-blog-container > div {
+    width: 100% !important;
+  }
+
+  .scrollable-content {
+    max-height: 50vh;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-group > * {
+    margin-bottom: 10px;
+    width: 100% !important;
+  }
+
+  .circular-btn {
+    width: 100%;
+    border-radius: 4px;
+  }
+  .center-div{
+    width: 100%;
+    margin-top: 0%;
+  }
+  .input-group{
+    position: relative;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .mt-3, .mb-3 {
+    margin: 3px 0;
+  }
+
+  .input-group,
+  .d-flex {
+    flex-wrap: nowrap;
+  }
+
+  .form-control {
+    flex-grow: 1;
+  }
+}
+
+/* Specific adjustments for screens down to 400px */
+@media (max-width: 400px) {
+  .h3 {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .sidebar-content ul {
+    padding-left: 0;
+  }
+
+  .sidebar-content li {
+    font-size: 0.875rem;
+  }
+
+}

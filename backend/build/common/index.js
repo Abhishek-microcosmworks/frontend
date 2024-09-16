@@ -1,1 +1,1 @@
-export { generateOtp, sendOtpEmail, verifyEmail, generateToken, expireOtp, findOtp, findBlog, expirationTime, otpExpirationTime } from './libs/index.js';
+export { generateOtp, sendOtpEmail, verifyEmail, generateToken, expireOtp, findOtp, findBlog, expirationTime, otpExpirationTime, getUserByEmail, getUserById } from './libs/index.js';

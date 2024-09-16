@@ -1,8 +1,8 @@
-import { blog } from '../../../db/model/index.js';
+import { blogSchema } from '../../../db/model/index.js';
 
 export async function findBlog(id){
     try {
-        const blogData = await blog.findById(id);
+        const blogData = await blogSchema.findById(id);
 
         if(blogData){
             return { error: false, data: blogData }

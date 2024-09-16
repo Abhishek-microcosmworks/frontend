@@ -1,8 +1,7 @@
-import 'dotenv/config';
+import "dotenv/config";
 
-import { generateOtp, sendOtpEmail } from '../../common/index.js';
-import { verifyEmail, expireOtp } from '../../common/index.js';
-import { saveOtp } from '../../src/lib/index.js';
+import { generateOtp, sendOtpEmail, verifyEmail, expireOtp } from "../../common/index.js";
+import { saveOtp } from "../../src/lib/index.js";
 
 export const resendOtp = async (req, res) => {
   try {
@@ -15,7 +14,6 @@ export const resendOtp = async (req, res) => {
     } else {
       await expireOtp(email);
       const sendOTP = generateOtp();
-      console.log('otp sent is ', sendOTP);
 
       const otpData = await saveOtp(email, sendOTP);
 
@@ -32,7 +30,7 @@ export const resendOtp = async (req, res) => {
       }
     }
   } catch (error) {
-    console.error('Error: ', error);
+    console.error("Error: ", error);
     return res.status(500).json({ message: error.message });
   }
 };

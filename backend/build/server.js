@@ -3,6 +3,7 @@ import router from './routes/index.js';
 import bodyParser from 'body-parser';
 import 'dotenv/config';
 import cors from 'cors';
+import { connectDb } from './db/chromadb-connection/index.js';
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,6 +18,8 @@ app.use(function (req, res, next) {
   next();
 });
 app.use("/api", router);
+
+connectDb();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);

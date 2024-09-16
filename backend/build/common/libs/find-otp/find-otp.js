@@ -1,8 +1,8 @@
-import { otpGeneration } from '../../../db/model/index.js';
+import { otpSchema } from '../../../db/model/index.js';
 
 export async function findOtp(email, otp) {
 
-  const otpConfirmation = await otpGeneration.findOne({
+  const otpConfirmation = await otpSchema.findOne({
     email,
     otp,
     isDeleted: { $ne: true }

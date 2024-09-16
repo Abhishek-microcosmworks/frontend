@@ -1,13 +1,17 @@
-import { blog } from '../../../../db/model/index.js';
+import { blogSchema } from "../../../../db/model/index.js";
 
-export async function findBlogs(email){
+export async function findBlogs(email) {
+  try {
+    const blogs = await blogSchema.find({
+      email,
+      isDeleted: false,
+    });
 
-   try {
-    const blogs = await blog.find({ email, isLatest: true, isDeleted: false });
+    console.log(blogs)
 
-   return { error: false, data: blogs }
-   } catch (error) {
-    console.log(error)
-    return { error: true, message: 'Server error' }
-   }
+    return { error: false, data: blogs };
+  } catch (error) {
+    console.log(error);
+    return { error: true, message: "Server error" };
+  }
 }

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import OpenAI from 'openai';
 
 export const generateKeywords = async (req, res) => {

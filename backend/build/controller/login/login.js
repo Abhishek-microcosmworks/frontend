@@ -1,16 +1,13 @@
-import { generateOtp, sendOtpEmail, expireOtp } from '../../common/index.js';
-import { verifyEmail } from '../../common/index.js';
-import { saveOtp, saveUser } from '../../src/lib/index.js';
+import { generateOtp, sendOtpEmail, expireOtp, verifyEmail } from "../../common/index.js";
+import { saveOtp, saveUser } from "../../src/lib/index.js";
 
 export const login = async (req, res, next) => {
   try {
-
     const { email, name } = req.body;
 
     const emailConfirmation = await verifyEmail(email, name);
 
-    if (emailConfirmation.error === true && emailConfirmation.message === 'Email or Name is incorrect!') {
-
+    if (emailConfirmation.error === true && emailConfirmation.message === "Email or Name is incorrect!") {
       const userData = await saveUser(name, email);
       if (userData.error === true) {
         return res.status(500).json("Internal server error!");
@@ -53,7 +50,7 @@ export const login = async (req, res, next) => {
       }
     }
   } catch (error) {
-    console.error('Error: ', error);
+    console.error("Error: ", error);
     return res.status(500).json({ message: error.message });
   }
 };

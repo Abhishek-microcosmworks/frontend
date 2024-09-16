@@ -1,1 +1,0 @@
-export { createPineconeIndex } from './create-pinecone-index.js';

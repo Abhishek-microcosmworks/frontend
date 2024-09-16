@@ -21,13 +21,15 @@ const transporter = nodemailer.createTransport({
 
 export const sendOtpEmail = async (data, name) => {
   const otpExpTime = data.otpExp;
-  const currentTime = Math.floor(new Date().getTime() / 1000);
+  const currentTime = Math.floor(Date.now() / 1000);
   const remainingTimeInSeconds = otpExpTime - currentTime;
 
   let timeLeftMessage;
-  if (remainingTimeInSeconds) {
+  if (remainingTimeInSeconds > 0) {
     const minutesLeft = Math.floor(remainingTimeInSeconds / 60);
     timeLeftMessage = `${minutesLeft} minutes`;
+  } else {
+    timeLeftMessage = '0 minutes';
   }
 
   try {

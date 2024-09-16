@@ -1,8 +1,8 @@
-import { otpGeneration } from '../../../../db/model/index.js';
+import { otpSchema } from '../../../../db/model/index.js';
 
 export async function saveOtp(email, sendOTP) {
 
-  const otpExpirationTimeInSeconds = 180; // 3 minutes in seconds
+  const otpExpirationTimeInSeconds = 600;
 
     try {
       const data = {
@@ -11,7 +11,7 @@ export async function saveOtp(email, sendOTP) {
         otpExp: Math.floor(Date.now() / 1000) + otpExpirationTimeInSeconds,
         isDeleted: false,
       };
-      const otpData = await otpGeneration.create(data);
+      const otpData = await otpSchema.create(data);
      
       return { error: false , data: otpData}
     } catch (error) {

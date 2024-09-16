@@ -1,41 +1,35 @@
-import Openai from 'openai'
+import Openai from "openai";
+import dotenv from "dotenv";
 
-export async function generateNewBlog(introduction) {
-    const openai = new Openai();
+dotenv.config();
 
-    try {
-  
-      //const prompt = `Provided you with the introduction ${introduction} and conclusion ${conclusion}, combine them and create a new blog. Please keep the writing style same as the introduction and conclusion.`
-  
-      // const prompt = `Combine the provided introduction and conclusion to create a cohesive blog. Ensure that the writing style remains consistent throughout. Do not use separate sections; instead, structure the content into paragraphs without plagarism.`;
-      const prompt = `Combine the provided content to create a cohesive blog. Ensure that the writing style remains consistent throughout. Do not use separate sections; instead, structure the content into paragraphs without plagarism.`;
-  
-      const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            //content: `Combine all the data and make a new blog. Please don't create sections create it on paragraph based`,
-            content: 'Generate a new blog by combining the content without plagarism.'
-          },
-          { role: 'user', content: prompt },
-          {
-            role: 'assistant',
-            //content: `Divide the blog into sections.`,
-            content: `Combine the content:\n"${introduction}"\n\nand create a coherent and engaging blog without plagarism.`
-          },
-        ],
-      });
-      // Extract the generated introduction from the response
-      const newBlog = response.choices[0].message.content;
-  
-      return { error: false, data: newBlog };
-  
-      //return generatedIntroduction;
-    } catch (error) {
-      // Handle any errors that may occur during the API call
-      console.error('Error generating new blog:', error);
+export async function generateNewBlog(content) {
+  const openai = new Openai();
+  try {
+    //const prompt = `Please read and integrate the following content:\n"${content}"\n\nThen, craft a coherent, engaging, and original blog post that is free of plagiarism. Ensure that the blog is well-structured and flows naturally, maintaining a captivating and informative tone throughout.`;
 
-      return { error: true, message: 'Error while generating the new blog.' }
-    }
+    const prompt = `${process.env.GENERATE_BLOG_PROMPT}${content}`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an assistant that helps create original, engaging, and high-quality blog content and blog title.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+
+    const newBlog = response.choices[0].message.content;
+    
+    return { error: false, data: newBlog };
+  } catch (error) {
+    console.error("Error generating new blog:", error);
+    return { error: true, message: "Error while generating the new blog." };
   }
+}

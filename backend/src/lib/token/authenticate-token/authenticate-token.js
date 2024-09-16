@@ -1,4 +1,4 @@
-import { authenticationToken } from '../../../../db/model/index.js';
+import { tokenSchema } from '../../../../db/model/index.js';
 
 export async function authenticateToken(req, res, next) {
   // Extract the token from the request headers
@@ -11,13 +11,13 @@ export async function authenticateToken(req, res, next) {
 
   try {
     // Retrieve the user based on the token from your database
-    const userToken = await authenticationToken.findOne({ token });
+    const userToken = await tokenSchema.findOne({ token });
     
 
     // Check if the user or token is not found
     if (!userToken || userToken.isDeleted) {
 
-      await authenticationToken.updateOne({ token }, { isDeleted: true });
+      await tokenSchema.updateOne({ token }, { isDeleted: true });
 
       return res.status(401).json({ error: 'Unauthorized: Invalid user or token' });
     }
@@ -29,7 +29,7 @@ export async function authenticateToken(req, res, next) {
 
         const newExpiration = Math.floor(Date.now() / 1000) + 2 * 24 * 60 * 60;
 
-        await authenticationToken.updateOne({ token }, { tokenExp: newExpiration })
+        await tokenSchema.updateOne({ token }, { tokenExp: newExpiration })
 
         return res.status(401).json({ error: 'Unauthorized: Token has expired' });
       }

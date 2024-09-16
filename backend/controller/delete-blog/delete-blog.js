@@ -11,9 +11,9 @@ export const deleteBlog = async (req, res) => {
       return res.status(500).json({ error: true, message: deleteResult.message });
     }
     
-      return res.status(200).json({ error: false, message:  deleteResult.message });
+      return res.status(200).json({ error: false, message: deleteResult.message });
   } catch (error) {
   console.error(error);
-  return res.status(500).json({ error: true, message: error.message});
+  return res.status(500).json({ error: true, message: error.message });
  }
 };

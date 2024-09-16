@@ -1,7 +1,7 @@
 import { updatedBlog } from '../../src/lib/index.js';
 
 export const editBlog = async (req, res) => {
-  const context = req.body.context;
+  const title = req.body.title;
   const id = req.body.id;
   const email = req.body.email;
   const blogContent = req.body.blogContent;
@@ -9,7 +9,7 @@ export const editBlog = async (req, res) => {
   try {
     const blogData = await updatedBlog(
       email,
-      context,
+      title,
       blogContent,
       id,
     );

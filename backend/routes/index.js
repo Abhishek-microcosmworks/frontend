@@ -7,17 +7,16 @@ import {
   resendOtp,
   editBlog,
   editImage,
-  getContext,
   generateImage,
-  generateKeywords,
   generateBlog,
   getImages,
-  generateEmbeddings,
   logout,
   getHistory,
-  deleteBlog
+  deleteBlog,
+  addBlogFeedback,
+  getBlogById
 }  from '../controller/index.js';
-import { authenticateToken } from '../src/lib/index.js';
+import { authenticateToken, getBlogData } from '../src/lib/index.js';
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -28,13 +27,14 @@ router.post('/login', login);
 router.post('/logout', logout);
 router.post('/resend-otp', resendOtp);
 
-router.post('/history',authenticateToken, getHistory);
-router.post('/article',authenticateToken, generateBlog);
+router.post('/get-blogs',authenticateToken, getHistory);
+router.post('/article', authenticateToken, generateBlog);
+router.post('/get-blog', authenticateToken, getBlogById);
 router.post('/gen-image',authenticateToken, generateImage);
-router.post('/edit-image',authenticateToken,editImage);
-router.post('/gen-context',authenticateToken, getContext);
+router.post('/edit-image',authenticateToken, editImage);
 router.post('/blog/getImages',authenticateToken, getImages);
 router.post('/blog/edit/blog',authenticateToken, editBlog);
 router.post('/blog/delete',authenticateToken, deleteBlog);
+router.post('/blog/feedback',authenticateToken, addBlogFeedback);
 
 export default router;

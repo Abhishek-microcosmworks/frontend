@@ -1,67 +1,64 @@
-import OpenAI from 'openai';
-import { extractSectionNames } from '../extract-sections-name/index.js';
-import { blogsContent } from '../../../../db/model/index.js';
-import { saveBlogsContent } from '../save-blogs-content/index.js';
+import OpenAI from "openai";
+import { extractSectionNames } from "../extract-sections-name/index.js";
+import { saveBlogsContent } from "../save-blogs-content/index.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export async function generateSections(content, email, requestId) {
-
   const blogs = [];
-  const sectionsContentArray = []; // to store generated text for each section
+  const sectionsContentArray = [];
 
   try {
     const openai = new OpenAI();
 
     for (const blogContent of content) {
-
-      //const section = sectionData.content.join('\n');
-
-      //const scrappedContent = blogData.blogContent;
-
-      const prompt = `Given the following blog content, please divide it into sections, labeling each section with a title in the format "Section 1: Title" and content = ${blogContent.content}`;
+      const prompt = `${process.env.GENERATE_SECTIONS_PROMPT}${blogContent.content}`;
 
       const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: "gpt-3.5-turbo",
         messages: [
           {
-            role: 'system',
+            role: "system",
             content: `Instructions for dividing the blog into sections.`,
           },
-          { role: 'user', content: prompt },
+          { role: "user", content: prompt },
           {
-            role: 'assistant',
+            role: "assistant",
             content: `Divide the blog into sections.`,
           },
         ],
       });
 
+      // Extract relevant information from OpenAI response
+      const generateText = response.choices[0].message.content;
 
-    // Extract relevant information from OpenAI response
-    const generateText = response.choices[0].message.content;
-    
-    const sectionsName = await extractSectionNames(generateText);
+      const sectionsName = await extractSectionNames(generateText);
 
-    if(sectionsName.error === true){
-      return { error: true, message: sectionsName.message }
+      if (sectionsName.error === true) {
+        return { error: true, message: sectionsName.message };
+      }
+
+      const result = await saveBlogsContent(
+        email,
+        blogContent.url,
+        requestId,
+        blogContent.content,
+        sectionsName.data
+      );
+
+      if (result.error === true) {
+        return { error: true, message: result.message };
+      }
+
+      sectionsContentArray.push(generateText);
+      blogs.push(result.data);
     }
 
-    const result = await saveBlogsContent(email, blogContent.url, requestId, blogContent.content, sectionsName.data)
+    return { error: false, data: blogs, sectionsContent: sectionsContentArray };
+  } catch (error) {
+    console.log(error);
 
-    if(result.error === true){
-      return { error: true, message: result.message }
-    }
-
-    sectionsContentArray.push(generateText)
-    blogs.push(result.data)
-    
-    // // Store the generated text for each section
-    // generatedTextArray.push(generateText);
-    // blogs.push(result)
-  }
-
-  return { error: false, data: blogs, sectionsContent: sectionsContentArray }
-  }catch(error){
-    console.log(error)
-
-    return { error: true, message: 'Error while generating sections.' }
+    return { error: true, message: "Error while generating sections." };
   }
 }

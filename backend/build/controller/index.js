@@ -10,13 +10,9 @@ export { editBlog } from './edit-blog/index.js';
 
 export { editImage } from './edit-image/index.js';
 
-export { getContext } from './get-context/index.js';
-
 export { generateImage } from './generate-images/index.js';
 
 export { generateKeywords } from './generate-keywords/index.js';
-
-export { generateSections } from './generate-sections/index.js';
 
 export { getPersonalisedBlog } from './get-data/index.js';
 
@@ -31,3 +27,7 @@ export { generateBlog } from './generate-new-blog/index.js';
 export { getHistory } from './get-history/index.js';
 
 export { deleteBlog } from './delete-blog/index.js';
+
+export { addBlogFeedback } from './add-blog-feedback/index.js';
+
+export { getBlogById } from './get-blog-by-Id/index.js';

@@ -1,8 +1,13 @@
-import RegisterData from './RegisterData.js';
-import authenticationToken from './authenticationToken.js';
-import blog from './blog.js';
-import otpGeneration from './otpGeneration.js';
-import image_db from './images.js';
-import { blogsContent } from './blog-used/index.js';
+export { blogsContent } from './blog-used/index.js';
 
-export { RegisterData, authenticationToken, blog , otpGeneration, image_db, blogsContent};
+export { blogSchema } from './blogs/index.js';
+
+export { feedbackSchema } from './feedback/index.js';
+
+export { imageSchema } from './images/index.js';
+
+export { otpSchema } from './otps/index.js';
+
+export { tokenSchema } from './tokens/index.js';
+
+export { userSchema } from './users/index.js';

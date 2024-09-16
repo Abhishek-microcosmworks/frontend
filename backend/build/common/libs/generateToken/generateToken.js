@@ -1,8 +1,7 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 export let expirationTime;
 export const generateToken = user => {
-  // Set expirationTime for 2 days (48 hours)
   expirationTime = Math.floor(Date.now() / 1000) + 2 * 24 * 60 * 60;
   return jwt.sign({ email: user.email, exp: expirationTime }, process.env.SECRET_KEY);
 };

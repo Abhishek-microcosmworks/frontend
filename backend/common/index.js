@@ -7,5 +7,7 @@ export {
     findOtp,
     findBlog,
     expirationTime,
-    otpExpirationTime 
+    otpExpirationTime,
+    getUserByEmail,
+    getUserById
 } from './libs/index.js';
