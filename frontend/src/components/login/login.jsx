@@ -13,6 +13,7 @@ export const LoginPage = () => {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState(false);
 
   const { setIsAuthenticated } = useAuth();
 
@@ -20,11 +21,11 @@ export const LoginPage = () => {
 
   const sendOTP = async () => {
     if (name.trim() === "" || email.trim() === "") {
-      setError("Please enter both name and email.");
+      setLoginError("Please enter both name and email.");
       return;
     }
 
-    setError("");
+    setLoginError("");
     try {
       setIsLoading(true);
       const response = await axios.post(`${API}/login`, {
@@ -35,27 +36,29 @@ export const LoginPage = () => {
       setShowOtpModal(true);
     } catch (error) {
       console.error("Error sending OTP:", error);
-      setError("An error occurred while sending OTP. Please try again.");
+      setLoginError("An error occurred while sending OTP. Please try again.");
       setIsLoading(false);
     }
   };
 
   const handleVerifyOtp = async (enteredOtp) => {
+    // Check if OTP is empty or incomplete
+    if (!enteredOtp || enteredOtp.length < 6) {
+      setError("Please enter the OTP.");
+      return;
+    }
+  
     setIsLoading(true);
-
-    setError("");
+    setError(""); // Clear any previous errors
+  
     try {
-      const response = await axios.post(
-        `${API}/verify-otp`,
-        {
-          email,
-          otp: enteredOtp,
-        }
-      );
-
+      const response = await axios.post(`${API}/verify-otp`, {
+        email,
+        otp: enteredOtp,
+      });
+  
       if (!response.data.data.error) {
         const { token, userId, email, tokenExp } = response.data.data;
-        console.log('token-login', token);
         localStorage.setItem("auth-token", token);
         localStorage.setItem("userID", userId);
         localStorage.setItem("email", email);
@@ -66,13 +69,14 @@ export const LoginPage = () => {
         setIsAuthenticated(false);
       }
     } catch (error) {
-      console.error("Error verifying OTP:", error);
+      console.error("Error verifying OTP:", error.message);
       setError("An error occurred during OTP verification. Please try again.");
     } finally {
       setIsLoading(false);
-      setShowOtpModal(false);
+      // Don't close the OTP modal if there's an error
     }
   };
+  
 
   const handleResendOtp = () => {
     console.log("Resending OTP...");
@@ -96,7 +100,7 @@ export const LoginPage = () => {
           <h2 className="mt-3 text-black">Welcome to Media Connects</h2>
           <div className="logo">MC</div>
           <h1 className="mt-4 mb-4 text-black">Login</h1>
-          {error && <div className="alert alert-danger">{error}</div>}
+          {loginError && <div className="alert alert-danger">{error}</div>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formName" className="mb-3">
               <Form.Control

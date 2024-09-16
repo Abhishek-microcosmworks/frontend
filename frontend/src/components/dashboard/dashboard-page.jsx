@@ -219,7 +219,7 @@ export const Dashboard = () => {
                   placeholder="Blog Url..."
                   value={url}
                   onChange={(e) => updateBlogUrl(index, e.target.value)}
-                  style={{ flex: 1 }} // This ensures the input takes most of the space
+                  style={{ flex: 1 }}
                 />
                 {blogUrls.length < 3 && (
                   <button

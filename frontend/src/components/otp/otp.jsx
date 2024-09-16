@@ -50,6 +50,7 @@ export const Otp = ({
   const handleResendClick = () => {
     if (canResend) {
       handleResendOtp();
+      setOtp(["", "", "", "", "", ""]);
       setCanResend(false);
       setTimer(30);
     }
@@ -83,7 +84,7 @@ export const Otp = ({
             />
           ))}
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "red", display: 'flex', justifyContent: 'center' }}>{error}</p>}
         <Button variant="dark" onClick={handleVerify} className="w-100">
           Verify
         </Button>
