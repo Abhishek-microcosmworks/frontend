@@ -90,6 +90,7 @@ export const Register = () => {
     >
       <Row className="login-box">
         <Col xs={12} className="text-center">
+        <h2 className="mt-3 text-black">Welcome to Media Connects</h2>
           <div className="logo">MC</div>
           <h1 className="mt-4 mb-4 text-black">Sign Up</h1>
           {error && <div className="alert alert-danger">{error}</div>}
