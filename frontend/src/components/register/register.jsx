@@ -17,7 +17,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const { setIsAuthenticated } = useAuth();
 
-  const API = "http://localhost:5000/api";
+  const API = "https://mediaconnects.live/api";
 
   const sendOTP = async () => {
     if (name.trim() === "" || email.trim() === "") {

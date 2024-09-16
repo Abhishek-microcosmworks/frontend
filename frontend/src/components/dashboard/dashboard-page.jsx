@@ -19,7 +19,7 @@ export const Dashboard = () => {
 
   const { setIsAuthenticated } = useAuth();
 
-  const API = "http://localhost:5000/api";
+  const API = "https://mediaconnects.live/api";
 
   const handleLogout = async () => {
     try {
