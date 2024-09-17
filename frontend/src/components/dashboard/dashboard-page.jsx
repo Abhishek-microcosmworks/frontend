@@ -276,7 +276,9 @@ export const Dashboard = () => {
               </>
             ) : (
               <div className="scrollable-content">
-                <p>{editableBlog}</p>
+                <pre className="text-dark" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                  {editableBlog.replace(/[#*]/g, '')}
+                </pre>
               </div>
             )}
 
