@@ -3,7 +3,9 @@ import { useNavigate, useLocation, Navigate, Routes, Route } from "react-router-
 import { LoginPage } from "../components/login";
 import { Dashboard } from "../components/dashboard";
 import { Register } from "../components/register";
+import { Display } from "../components/display";
 
+// Create an authentication context to share authentication state across components
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -13,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
+    // Check if there's a token in localStorage and if it's still valid
     const token = localStorage.getItem("auth-token");
     const expiryTime = localStorage.getItem("tokenExp");
     const currentTime = Math.floor(new Date().getTime() / 1000);
@@ -28,23 +31,31 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    // Control the navigation depending on authentication status
     if (!isLoading) {
-      if (isAuthenticated && (location.pathname === "/" || location.pathname === "/register")) {
-        navigate("/dashboard");
+      if (isAuthenticated && location.pathname === "/") {
+        navigate("/dashboard"); // If authenticated, redirect to dashboard
       } else if (!isAuthenticated && location.pathname === "/dashboard") {
-        navigate("/");
+        navigate("/"); // If not authenticated, redirect to login or display page
       }
     }
   }, [isAuthenticated, isLoading, location.pathname, navigate]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; // Show a loading screen while checking auth status
   }
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
       <div>
         <Routes>
+          {/* The first/default route is DisplayPage */}
+          <Route 
+            path="/" 
+            element={<Display />} // DisplayPage is the first page visible
+          />
+
+          {/* Handle authentication and redirection from DisplayPage */}
           <Route 
             path="/register" 
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} 
@@ -54,7 +65,7 @@ export const AuthProvider = ({ children }) => {
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} 
           />
           <Route 
-            path="/" 
+            path="/login" 
             element={isAuthenticated ? <Navigate to="/dashboard" /> : <LoginPage />} 
           />
         </Routes>
@@ -63,4 +74,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// Custom hook to access the authentication context
 export const useAuth = () => useContext(AuthContext);
