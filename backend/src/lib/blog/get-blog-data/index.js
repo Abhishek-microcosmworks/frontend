@@ -1,1 +1,0 @@
-export { getBlogData } from './get-blog-data.js'

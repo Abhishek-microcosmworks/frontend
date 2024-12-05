@@ -1,1 +1,0 @@
-export { findOtp } from './find-otp.js';

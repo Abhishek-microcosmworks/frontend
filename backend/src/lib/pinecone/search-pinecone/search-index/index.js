@@ -1,1 +1,0 @@
-export { searchIndex } from './search-index.js';

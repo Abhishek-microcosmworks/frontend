@@ -1,1 +1,0 @@
-export { generateEmbeddings } from './getEmbeddings.js';

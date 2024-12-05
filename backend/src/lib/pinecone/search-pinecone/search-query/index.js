@@ -1,1 +1,0 @@
-export { searchQuery } from './search-query.js';

@@ -1,1 +1,0 @@
-export { generateToken, expirationTime } from './generateToken.js';
